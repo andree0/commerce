@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+        {% for auction in auctions %}
+        <a href="{% url 'listing_details' auction_pk=auction.pk %}" class="link_detail">
+            <div class="d-flex mb-3 rounded p-0 listing">
+                <div class="col-4 text-center align-items-center m-auto px-0">
+                    {% if auction.image %}
+                        <img src="{{ auction.image.url }}" class="rounded">
+                    {% else %}
+                        <span class="text-muted m-0">No photo.</span>
+                    {% endif %}
+                </div>
+                <div class="col-10 pl-3 py-2">
+                    <h5>{{ auction.title }}</h5>
+                    {% if bid %}
+                        <p class="mb-0">Price: ${{ bid }}</p>
+                    {% else %}
+                        <p class="mb-0">Price: ${{ auction.min_price }}</p>
+                    {% endif %}
+                    <p class="mb-0 text-muted">Created: {{ auction.created }}</p>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+            No any active auctions.
+        {% endfor %}
+
+{% endblock %}

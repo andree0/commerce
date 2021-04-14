@@ -1,0 +1,40 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div>
+    <h3>Listing: {{ auction.title }}</h3>
+</div>
+{% if auction.image %}
+<div>
+    <img src="{{ auction.image.url }}">
+</div>
+<div class="my-2 ml-3">Description: {{ auction.description }}</div>
+{% endif %}
+<div>Current price: {% if current_price %}{{ current_price }}{% else %}{{ auction.min_price }}{% endif %}</div>
+{% if user.is_authenticated and user != auction.owner %}
+    <form action="" method="POST">{% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+{% elif user.is_authenticated and user == auction.owner%}
+    <form action="" method="POST">{% csrf_token %}
+        <input type="hidden" name="active" value="False">
+        <input type="submit" value="Close listing" class="btn btn-danger btn-block">
+    </form>
+{% endif %}
+<div class="mt-3">
+    <h4>Details</h4>
+    <ul>
+        <li>Listed by: {{ auction.owner }}</li>
+        <li>
+            Category:
+            {% for cat in auction.category.all %}
+            {{ cat.name }},
+            {% empty %}
+            No Category Listed
+            {% endfor %}
+        </li>
+    </ul>
+</div>
+
+{% endblock %}
