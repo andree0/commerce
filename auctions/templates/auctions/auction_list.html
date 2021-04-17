@@ -3,7 +3,7 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-        {% for auction in auctions %}
+        {% for auction in auction_list %}
         <a href="{% url 'listing_details' auction_pk=auction.pk %}" class="link_detail">
             <div class="d-flex mb-3 rounded p-0 listing">
                 <div class="col-4 text-center align-items-center m-auto px-0">

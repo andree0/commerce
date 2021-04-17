@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("login/", views.login_view, name="login"),
-    path("logout/", views.logout_view, name="logout"),
+    path("", views.IndexView.as_view(), name="index"),
+    path("login/", auth_views.LoginView.as_view(template_name='auctions/login.html'), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(next_page="/"), name="logout"),
     path("register/", views.register, name="register"),
     path("create_auction/", views.CreateNewAuctionView.as_view(), name="create_auction"),
     path("listing_details/<int:auction_pk>/", views.ListingPageView.as_view(), name="listing_details"),
