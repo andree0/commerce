@@ -9,7 +9,7 @@ urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
     path("login/", auth_views.LoginView.as_view(template_name='auctions/login.html'), name="login"),
     path("logout/", auth_views.LogoutView.as_view(next_page="/"), name="logout"),
-    path("register/", views.register, name="register"),
+    path("register/", views.RegisterView.as_view(), name="register"),
     path("create_auction/", views.CreateNewAuctionView.as_view(), name="create_auction"),
     path("listing_details/<int:auction_pk>/", views.ListingPageView.as_view(), name="listing_details"),
 ]

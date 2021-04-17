@@ -9,7 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView
 from django.views.generic.base import View
 
-from .forms import AuctionForm, BidForm
+from .forms import AuctionForm, BidForm, RegisterForm
 from .models import User, Auction, Bid
 
 
@@ -20,34 +20,46 @@ class IndexView(ListView):
 
 class RegisterView(CreateView):
     model = User
+    form_class = RegisterForm
+    template_name = 'auctions/register.html'
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        super().form_valid(form)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        form.save()
+        user = authenticate(self.request, username=username, password=password)
+        login(self.request, user)
+        return redirect(self.get_success_url())
 
 
-
-def register(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
-
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
-            })
-
-        # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(request, "auctions/register.html", {
-                "message": "Username already taken."
-            })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "auctions/register.html")
+# def register(request):
+#     if request.method == "POST":
+#         username = request.POST["username"]
+#         email = request.POST["email"]
+#
+#         # Ensure password matches confirmation
+#         password = request.POST["password"]
+#         confirmation = request.POST["confirmation"]
+#         if password != confirmation:
+#             return render(request, "auctions/register.html", {
+#                 "message": "Passwords must match."
+#             })
+#
+#         # Attempt to create new user
+#         try:
+#             user = User.objects.create_user(username, email, password)
+#             user.save()
+#         except IntegrityError:
+#             return render(request, "auctions/register.html", {
+#                 "message": "Username already taken."
+#             })
+#         login(request, user)
+#         return HttpResponseRedirect(reverse("index"))
+#     else:
+#         return render(request, "auctions/register.html")
 
 
 class CreateNewAuctionView(LoginRequiredMixin, CreateView):

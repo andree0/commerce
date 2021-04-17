@@ -2,8 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
 
-import commerce.settings
-
 
 class User(AbstractUser):
     username = models.CharField(max_length=64, unique=True)
@@ -11,7 +9,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=64)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=64)
-    address = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True, verbose_name='Address (optional)')
 
 
 class Category(models.Model):

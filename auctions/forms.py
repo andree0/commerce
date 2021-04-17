@@ -1,52 +1,56 @@
 from django import forms
-from django.contrib.auth.password_validation import (
-    CommonPasswordValidator,
-    MinimumLengthValidator,
-    NumericPasswordValidator,
-    UserAttributeSimilarityValidator
-)
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 from .models import Auction, Bid, User
 
 
-class UserLoginForm(forms.Form):
-    username = forms.CharField(max_length=64)
-    password = forms.CharField(widget=forms.PasswordInput, max_length=64)
-
-    def clean(self):
-        cleaned_data = super().clean()
-        username = cleaned_data['username']
-        password = cleaned_data['password']
-        user = authenticate(username=username, password=password)
-        if user is None:
-            self.add_error(None, 'Podaj poprawny login lub hasło')
-
-    def login(self, request):
-        user = authenticate(**self.cleaned_data)
-        return login(request, user)
+def validate_password(value):
+    if value.isdigit():
+        raise ValidationError("Password cannot contain only numbers !")
+    if len(value) < 9:
+        raise ValidationError("Password must be longer than 8 characters !")
+    if value.isalnum() is False or value.isspace() is True:
+        raise ValidationError("Password cannot contain  whitespace !")
+    if value.isalpha():
+        raise ValidationError("Password must contain one digit and one special character !")
+    if value.islower():
+        raise ValidationError("Password must contain one uppercase letter !")
+    if value.isupper():
+        raise ValidationError("Password must contain one lowercase letter !")
 
 
 class RegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, validators=[
-        CommonPasswordValidator,
-        MinimumLengthValidator,
-        NumericPasswordValidator,
-        UserAttributeSimilarityValidator
-    ])
-    confirmation_password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
+        validators=[validate_password, ]
+    )
+    confirmation_password = forms.CharField(widget=forms.PasswordInput(
+        attrs={'placeholder': 'Confirm Password'}
+    ))
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'address')
+        fields = ('username', 'first_name', 'last_name', 'email',
+                  'password', 'confirmation_password', 'address', )
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email Address'}),
+            'address': forms.TextInput(attrs={'placeholder': 'Address (optional)'}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data['password'] != cleaned_data['confirmation_password']:
-            self.add_error('confirmation_password', "Hasła nie są identyczne !")
+        password = cleaned_data["password"]
+        validate_password(password)
+        if password != cleaned_data['confirmation_password']:
+            self.add_error('confirmation_password', "Passwords do not match !")
         if get_user_model().objects.filter(username=cleaned_data['username']):
-            self.add_error('username', "Użytkownik o podanej nazwie już istnieje !")
+            self.add_error('username', "Username is already taken !")
         if get_user_model().objects.filter(email=cleaned_data['email']):
-            self.add_error('email', "Użytkownik o podanym emailu już istnieje !")
+            self.add_error('email', "User with the given email already exists !")
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -70,4 +74,4 @@ class AuctionForm(forms.ModelForm):
 class BidForm(forms.ModelForm):
     class Meta:
         model = Bid
-        fields = ('price', )
+        fields = ('price',)
