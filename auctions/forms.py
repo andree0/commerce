@@ -43,9 +43,7 @@ class RegisterForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        password = cleaned_data["password"]
-        validate_password(password)
-        if password != cleaned_data['confirmation_password']:
+        if cleaned_data["password"] != cleaned_data['confirmation_password']:
             self.add_error('confirmation_password', "Passwords do not match !")
         if get_user_model().objects.filter(username=cleaned_data['username']):
             self.add_error('username', "Username is already taken !")
