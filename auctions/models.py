@@ -9,14 +9,12 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=64)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=64)
-    address = models.CharField(max_length=255, blank=True, null=True, verbose_name='Address (optional)')
+    address = models.CharField(max_length=255, blank=True, null=True,
+                               verbose_name='Address (optional)')
 
 
 class Category(models.Model):
     name = models.CharField(max_length=32)
-
-    class Meta:
-        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -25,9 +23,11 @@ class Category(models.Model):
 class Auction(models.Model):
     title = models.CharField(max_length=32)
     description = models.TextField(null=True, blank=True)
-    min_price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Min. price [$]',
+    min_price = models.DecimalField(max_digits=7, decimal_places=2,
+                                    verbose_name='Min. price [$]',
                                     validators=[MinValueValidator(1)])
-    current_price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Current price [$]',
+    current_price = models.DecimalField(max_digits=7, decimal_places=2,
+                                        verbose_name='Current price [$]',
                                         null=True)
     category = models.ManyToManyField(Category)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
@@ -53,7 +53,8 @@ class Auction(models.Model):
 class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Your bid [$]')
+    price = models.DecimalField(max_digits=7, decimal_places=2,
+                                verbose_name='Your bid [$]')
 
     def save(self, *args, **kwargs):
         self.auction.save()

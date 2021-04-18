@@ -10,7 +10,13 @@
 </div>
 <div class="my-2 ml-3">Description: {{ auction.description }}</div>
 {% endif %}
-<div>Current price: {% if current_price %}{{ current_price }}{% else %}{{ auction.min_price }}{% endif %}</div>
+<div>Current price:
+    {% if auction.current_price %}
+        {{ auction.current_price }}
+    {% else %}
+        {{ auction.min_price }}
+    {% endif %}
+</div>
 {% if user.is_authenticated and user != auction.owner %}
     <form action="" method="POST">{% csrf_token %}
         {{ form }}

@@ -10,32 +10,26 @@
     </head>
     <body>
         <h1>Auctions</h1>
-        <div>
+        <div class="mb-3">
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
+                <a class="d-inline btn btn-outline-primary btn-sm" role="button"
+                   href="{% url 'logout' %}">Log Out</a>
             {% else %}
                 Not signed in.
+                <a class="d-inline btn btn-outline-primary btn-sm" role="button"
+                   href="{% url 'login' %}">Log In</a>
+                <a class="d-inline btn btn-primary btn-sm" role="button"
+                   href="{% url 'register' %}">Register</a>
             {% endif %}
         </div>
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
             </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create_auction' %}">Create auction</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create_auction' %}">Create auction</a>
+            </li>
         </ul>
         <hr>
         {% block body %}

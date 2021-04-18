@@ -35,33 +35,6 @@ class RegisterView(CreateView):
         return redirect(self.get_success_url())
 
 
-# def register(request):
-#     if request.method == "POST":
-#         username = request.POST["username"]
-#         email = request.POST["email"]
-#
-#         # Ensure password matches confirmation
-#         password = request.POST["password"]
-#         confirmation = request.POST["confirmation"]
-#         if password != confirmation:
-#             return render(request, "auctions/register.html", {
-#                 "message": "Passwords must match."
-#             })
-#
-#         # Attempt to create new user
-#         try:
-#             user = User.objects.create_user(username, email, password)
-#             user.save()
-#         except IntegrityError:
-#             return render(request, "auctions/register.html", {
-#                 "message": "Username already taken."
-#             })
-#         login(request, user)
-#         return HttpResponseRedirect(reverse("index"))
-#     else:
-#         return render(request, "auctions/register.html")
-
-
 class CreateNewAuctionView(LoginRequiredMixin, CreateView):
     login_url = '/login/'
     form_class = AuctionForm

@@ -3,21 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from .models import Auction, Bid, User
-
-
-def validate_password(value):
-    if value.isdigit():
-        raise ValidationError("Password cannot contain only numbers !")
-    if len(value) < 9:
-        raise ValidationError("Password must be longer than 8 characters !")
-    if value.isalnum() is False or value.isspace() is True:
-        raise ValidationError("Password cannot contain  whitespace !")
-    if value.isalpha():
-        raise ValidationError("Password must contain one digit and one special character !")
-    if value.islower():
-        raise ValidationError("Password must contain one uppercase letter !")
-    if value.isupper():
-        raise ValidationError("Password must contain one lowercase letter !")
+from .validators import validate_password
 
 
 class RegisterForm(forms.ModelForm):
@@ -41,14 +27,25 @@ class RegisterForm(forms.ModelForm):
             'address': forms.TextInput(attrs={'placeholder': 'Address (optional)'}),
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data["password"] != cleaned_data['confirmation_password']:
-            self.add_error('confirmation_password', "Passwords do not match !")
-        if get_user_model().objects.filter(username=cleaned_data['username']):
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if get_user_model().objects.filter(username=username):
             self.add_error('username', "Username is already taken !")
-        if get_user_model().objects.filter(email=cleaned_data['email']):
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if get_user_model().objects.filter(email=email):
             self.add_error('email', "User with the given email already exists !")
+        return email
+
+    def clean_confirmation_password(self):
+        confirmation_password = self.cleaned_data.get('confirmation_password')
+        password = self.cleaned_data.get('password')
+        if password:
+            if confirmation_password != password:
+                self.add_error('confirmation_password', "Passwords do not match !")
+        return confirmation_password
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -64,7 +61,7 @@ class AuctionForm(forms.ModelForm):
         fields = ('title', 'description', 'min_price', 'category', 'image', 'owner',)
         widgets = {
             'category': forms.CheckboxSelectMultiple,
-            'min_price': forms.NumberInput(attrs={'min': 0}),
+            'min_price': forms.NumberInput(attrs={'min': 1}),
             'owner': forms.HiddenInput()
         }
 
