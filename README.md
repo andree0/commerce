@@ -1,2 +1,2 @@
 # commerce
-part of CS50 course
+final project of CodersLab course
