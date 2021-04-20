@@ -60,8 +60,8 @@ class CreateNewAuctionView(LoginRequiredMixin, CreateView):
         return form_kwargs
 
 
-class ListingPageView(View):
-    template_name = 'auctions/listing_details.html'
+class ListingsPageView(View):
+    template_name = 'auctions/listings_details.html'
     form_class = BidForm
     context = {}
 
@@ -94,7 +94,7 @@ class ListingPageView(View):
                     'price': round(float(auction.current_price) + 0.01, 2)})
             else:
                 self.context['form'] = form
-        if request.POST.get('close_listing'):
+        if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
 

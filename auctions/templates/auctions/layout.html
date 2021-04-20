@@ -9,7 +9,7 @@
         <script src="{% static 'auctions/auctions.js' %}" defer></script>
     </head>
     <body>
-        <h1>Auctions</h1>
+        <h1><a href="{% url 'index' %}" class="text-decoration-none text-body">Auctions</a></h1>
         <div class="mb-3">
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
@@ -25,7 +25,7 @@
         </div>
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'all_listings' %}">All Listings</a>
+                <a class="nav-link text-secondary" href="{% url 'all_listings' %}">All Listings</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>

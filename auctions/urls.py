@@ -11,7 +11,7 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(next_page="/"), name="logout"),
     path("register/", views.RegisterView.as_view(), name="register"),
     path("create_auction/", views.CreateNewAuctionView.as_view(), name="create_auction"),
-    path("listing_details/<int:auction_pk>/", views.ListingPageView.as_view(), name="listing_details"),
+    path("listings_details/<int:auction_pk>/", views.ListingsPageView.as_view(), name="listings_details"),
     path("all_listings/", views.AllListingsView.as_view(), name="all_listings")
 ]
 

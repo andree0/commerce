@@ -2,7 +2,7 @@
 
 {% block body %}
 <div>
-    <h3>Listing: {{ auction.title }}</h3>
+    <h3>Listings: {{ auction.title }}</h3>
 </div>
 {% if auction.image %}
 <div>
@@ -25,7 +25,7 @@
         </form>
     {% elif user.is_authenticated and user == auction.owner%}
         <form action="" method="POST">{% csrf_token %}
-            <input type="submit" value="Close listing" class="btn btn-danger btn-block" name="close_listing">
+            <input type="submit" value="Close Listings" class="btn btn-danger btn-block" name="close_listings">
         </form>
     {% endif %}
 {% else %}
