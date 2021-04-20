@@ -35,19 +35,13 @@ class Auction(models.Model):
     created = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    @property
     def get_current_price(self):
         highest_bid = Bid.objects.filter(auction=self).aggregate(models.Max('price'))
         if highest_bid:
             self.current_price = highest_bid['price__max']
-            return self.current_price
         else:
-            return null
-
-    def save(self, *args, **kwargs):
-        if self.current_price is None:
-            self.current_price = self.get_current_price
-        super().save(*args, **kwargs)
+            self.current_price = null
+        return self.current_price
 
 
 class Bid(models.Model):
@@ -55,10 +49,6 @@ class Bid(models.Model):
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2,
                                 verbose_name='Your bid [$]')
-
-    def save(self, *args, **kwargs):
-        self.auction.save()
-        super().save(*args, **kwargs)
 
 
 class Comment(models.Model):

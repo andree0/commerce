@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -61,9 +63,40 @@ class ListingPageView(View):
     def get(self, request, auction_pk, *args, **kwargs):
         auction = get_object_or_404(Auction, pk=auction_pk)
         self.context['auction'] = auction
+        if auction.current_price:
+            form = self.form_class(initial={'user': request.user, 'auction': auction,
+                                            'price': round(float(auction.current_price) + 0.01, 2)})
+        else:
+            form = self.form_class(initial={'user': request.user, 'auction': auction,
+                                            'price': round(float(auction.min_price) + 0.01, 2)})
+        self.context['form'] = form
 
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
-        pass
+        auction = get_object_or_404(Auction, pk=kwargs['auction_pk'])
+        form = self.form_class(request.POST, initial={
+            'user': request.user,
+            'auction': auction,
+            'price': round(float(auction.current_price) + 0.01, 2)
+        })
+        if form.is_valid():
+            if request.POST.get('add_bid'):
+                new_bid = Bid.objects.create(**form.cleaned_data)
+                new_bid.save()
+                auction.get_current_price()
+                auction.save()
+                self.context['auction'] = auction
+                self.context['form'] = self.form_class(initial={
+                    'user': request.user,
+                    'auction': auction,
+                    'price': round(float(auction.current_price) + 0.01, 2)})
+            if request.POST.get('close_listing'):
+                auction.active = False
+                auction.save()
+        else:
+            self.context['form'] = form
+
+        return render(self.request, self.template_name, self.context)
+
 

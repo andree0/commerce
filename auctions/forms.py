@@ -61,7 +61,7 @@ class AuctionForm(forms.ModelForm):
         fields = ('title', 'description', 'min_price', 'category', 'image', 'owner',)
         widgets = {
             'category': forms.CheckboxSelectMultiple,
-            'min_price': forms.NumberInput(attrs={'min': 1}),
+            'min_price': forms.NumberInput(attrs={'min': 1.00, 'step': 0.01, 'value': 1.00}),
             'owner': forms.HiddenInput()
         }
 
@@ -69,4 +69,18 @@ class AuctionForm(forms.ModelForm):
 class BidForm(forms.ModelForm):
     class Meta:
         model = Bid
-        fields = ('price',)
+        fields = ('price', 'auction', 'user', )
+        widgets = {
+            'auction': forms.HiddenInput,
+            'user': forms.HiddenInput,
+            'price': forms.NumberInput(attrs={
+                'step': 0.01,
+            })
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        price = cleaned_data.get('price')
+        auction = cleaned_data.get('auction')
+        if price <= auction.current_price or price <= auction.min_price:
+            self.add_error('price', "Your bid must be a higher than current price !")

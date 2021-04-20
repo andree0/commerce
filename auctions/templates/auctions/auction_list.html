@@ -15,10 +15,15 @@
                 </div>
                 <div class="col-10 pl-3 py-2">
                     <h5>{{ auction.title }}</h5>
-                    {% if bid %}
-                        <p class="mb-0">Price: ${{ bid }}</p>
+                    {% if auction.current_price %}
+                        <p class="mb-0">Price: ${{ auction.current_price }}</p>
                     {% else %}
                         <p class="mb-0">Price: ${{ auction.min_price }}</p>
+                    {% endif %}
+                    {% if auction.active %}
+                        <p class="text-success">active</p>
+                    {% else %}
+                        <p class="text-danger">closed</p>
                     {% endif %}
                     <p class="mb-0 text-muted">Created: {{ auction.created }}</p>
                 </div>
