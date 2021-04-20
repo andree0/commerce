@@ -15,6 +15,11 @@ from .forms import AuctionForm, BidForm, RegisterForm
 from .models import User, Auction, Bid
 
 
+class AllListingsView(ListView):
+    model = Auction
+    extra_context = {'all': True}
+
+
 class IndexView(ListView):
     model = Auction
     queryset = Auction.objects.filter(active=True)
@@ -75,13 +80,9 @@ class ListingPageView(View):
 
     def post(self, request, *args, **kwargs):
         auction = get_object_or_404(Auction, pk=kwargs['auction_pk'])
-        form = self.form_class(request.POST, initial={
-            'user': request.user,
-            'auction': auction,
-            'price': round(float(auction.current_price) + 0.01, 2)
-        })
-        if form.is_valid():
-            if request.POST.get('add_bid'):
+        if request.POST.get('add_bid'):
+            form = self.form_class(request.POST)
+            if form.is_valid():
                 new_bid = Bid.objects.create(**form.cleaned_data)
                 new_bid.save()
                 auction.get_current_price()
@@ -91,11 +92,11 @@ class ListingPageView(View):
                     'user': request.user,
                     'auction': auction,
                     'price': round(float(auction.current_price) + 0.01, 2)})
-            if request.POST.get('close_listing'):
-                auction.active = False
-                auction.save()
-        else:
-            self.context['form'] = form
+            else:
+                self.context['form'] = form
+        if request.POST.get('close_listing'):
+            auction.active = False
+            auction.save()
 
         return render(self.request, self.template_name, self.context)
 

@@ -1,7 +1,11 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+{% if all %}
+    <h2>All Listings</h2>
+{% else %}
     <h2>Active Listings</h2>
+{% endif %}
 
         {% for auction in auction_list %}
         <a href="{% url 'listing_details' auction_pk=auction.pk %}" class="link_detail">
@@ -30,7 +34,11 @@
             </div>
         </a>
         {% empty %}
-            No any active auctions.
+            {% if all %}
+                No any auctions.
+            {% else %}
+                No any active auctions.
+            {% endif %}
         {% endfor %}
 
 {% endblock %}
