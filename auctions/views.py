@@ -8,26 +8,32 @@ from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, DeleteView, ListView
 from django.views.generic.base import View
 
 from .forms import AuctionForm, BidForm, RegisterForm
 from .models import Auction, Bid, Category, User, Watchlist
 
 
+AUCTIONS_PAGINATE_BY = 10
+
+
 class AllListingsView(ListView):
     model = Auction
     extra_context = {'all': True}
+    paginate_by = AUCTIONS_PAGINATE_BY
 
 
 class IndexView(ListView):
     model = Auction
     queryset = Auction.objects.filter(active=True)
     extra_context = {'categories': Category.objects.all()}
+    paginate_by = AUCTIONS_PAGINATE_BY
 
 
 class CategoryListingsView(ListView):
     model = Auction
+    paginate_by = AUCTIONS_PAGINATE_BY
 
     def get_queryset(self):
         category = Category.objects.get(name=self.kwargs['category_name'])
@@ -36,9 +42,20 @@ class CategoryListingsView(ListView):
 
 class WatchlistView(ListView):
     model = Auction
+    template_name = 'auctions/auction_list.html'
+    paginate_by = AUCTIONS_PAGINATE_BY
 
     def get_queryset(self):
         return Watchlist.objects.filter(user=self.request.user).values('auction')
+
+
+class DeleteFromWatchlistView(DeleteView):
+    model = Watchlist
+    success_url = reverse_lazy('listings_details')
+
+
+class AddToWatchlistView(CreateView):
+    model = Watchlist
 
 
 class RegisterView(CreateView):
@@ -84,6 +101,8 @@ class ListingsPageView(View):
     def get(self, request, auction_pk, *args, **kwargs):
         auction = get_object_or_404(Auction, pk=auction_pk)
         self.context['auction'] = auction
+        if Watchlist.objects.filter(user=request.user, auction=auction):
+            self.context['is_watch'] = True
         if auction.current_price:
             form = self.form_class(initial={'user': request.user, 'auction': auction,
                                             'price': round(float(auction.current_price) + 0.01, 2)})
@@ -115,5 +134,3 @@ class ListingsPageView(View):
             auction.save()
 
         return render(self.request, self.template_name, self.context)
-
-
