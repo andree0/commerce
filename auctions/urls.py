@@ -12,7 +12,9 @@ urlpatterns = [
     path("register/", views.RegisterView.as_view(), name="register"),
     path("create_auction/", views.CreateNewAuctionView.as_view(), name="create_auction"),
     path("listings_details/<int:auction_pk>/", views.ListingsPageView.as_view(), name="listings_details"),
-    path("all_listings/", views.AllListingsView.as_view(), name="all_listings")
+    path("all_listings/", views.AllListingsView.as_view(), name="all_listings"),
+    path("category/<str:category_name>/", views.CategoryListingsView.as_view(), name="category_listings"),
+    path("watchlist/", views.WatchlistView.as_view(), name="watchlist"),
 ]
 
 if settings.DEBUG:

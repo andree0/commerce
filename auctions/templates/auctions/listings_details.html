@@ -10,11 +10,11 @@
 </div>
 <div class="my-2 ml-3">Description: {{ auction.description }}</div>
 {% endif %}
-<div>Current price [$]:
+<div>
     {% if auction.current_price %}
-        {{ auction.current_price }}
+        <h3 class="font-weight-bold">${{ auction.current_price }}</h3>
     {% else %}
-        {{ auction.min_price }}
+        <h3 class="font-weight-bold">${{ auction.min_price }}</h3>
     {% endif %}
 </div>
 {% if auction.active %}

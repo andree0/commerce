@@ -12,7 +12,7 @@ from django.views.generic import CreateView, ListView
 from django.views.generic.base import View
 
 from .forms import AuctionForm, BidForm, RegisterForm
-from .models import User, Auction, Bid
+from .models import Auction, Bid, Category, User, Watchlist
 
 
 class AllListingsView(ListView):
@@ -23,6 +23,22 @@ class AllListingsView(ListView):
 class IndexView(ListView):
     model = Auction
     queryset = Auction.objects.filter(active=True)
+    extra_context = {'categories': Category.objects.all()}
+
+
+class CategoryListingsView(ListView):
+    model = Auction
+
+    def get_queryset(self):
+        category = Category.objects.get(name=self.kwargs['category_name'])
+        return Auction.objects.filter(category=category, active=True)
+
+
+class WatchlistView(ListView):
+    model = Auction
+
+    def get_queryset(self):
+        return Watchlist.objects.filter(user=self.request.user).values('auction')
 
 
 class RegisterView(CreateView):
