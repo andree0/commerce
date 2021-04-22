@@ -3,6 +3,7 @@
 {% block body %}
 <div class="d-flex flex-column">
     <h3>Listings: {{ auction.title }}
+    {% if user.is_authenticated and user != auction.owner %}
         <form action="" method="POST" class="d-inline float-right">{% csrf_token %}
             {% if is_watch %}
                 <button type="submit" value="delete_from_watchlist"
@@ -24,21 +25,20 @@
                 </button>
             {% endif %}
         </form>
+    {% endif %}
     </h3>
 
 </div>
 {% if auction.image %}
-<div class="d-flex flex-column">
-    <img class="justify-content-center" src="{{ auction.image.url }}" alt="photo">
+<div class="d-flex flex-column m-auto" style="max-width: {{ img_width }}px;
+        max-height: {{ img_height }}px;">
+    <img class="p-0 mx-auto" src="{{ auction.image.url }}" alt="photo"
+         style="max-width: 100%;">
 </div>
 <div class="my-2 ml-3">Description: {{ auction.description }}</div>
 {% endif %}
 <div>
-    {% if auction.current_price %}
-        <h3 class="font-weight-bold">${{ auction.current_price|floatformat:2 }}</h3>
-    {% else %}
-        <h3 class="font-weight-bold">${{ auction.min_price|floatformat:2 }}</h3>
-    {% endif %}
+    <h3 class="font-weight-bold">${{ auction.current_price|floatformat:2 }}</h3>
 </div>
 {% if auction.active %}
     {% if user.is_authenticated and user != auction.owner %}

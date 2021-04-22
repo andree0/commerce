@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.files.images import get_image_dimensions
 from django.db import IntegrityError
 from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
@@ -11,7 +12,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView
 from django.views.generic.base import View
 
-from .forms import AuctionForm, BidForm, RegisterForm, WatchlistForm
+from .forms import AuctionForm, BidForm, RegisterForm
 from .models import Auction, Bid, Category, User, Watchlist
 
 
@@ -92,9 +93,18 @@ class ListingsPageView(View):
 
     def get(self, request, auction_pk, *args, **kwargs):
         auction = get_object_or_404(Auction, pk=auction_pk)
+        try:
+            img_width, img_height = get_image_dimensions(auction.image.file)
+            self.context['img_width'] = img_width
+            self.context['img_height'] = img_height
+        except ValueError:
+            pass
         self.context['auction'] = auction
-        if Watchlist.objects.filter(user=request.user, auction=auction):
-            self.context['is_watch'] = True
+        if request.user.is_authenticated:
+            if Watchlist.objects.filter(user=request.user, auction=auction):
+                self.context['is_watch'] = True
+            else:
+                self.context['is_watch'] = False
         if auction.current_price:
             form = self.form_class(initial={'user': request.user, 'auction': auction,
                                             'price': round(float(auction.current_price) + 0.01, 2)})

@@ -25,6 +25,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for cat in CATEGORIES:
-            Category.objects.create(
-                name=cat
-            )
+            if not Category.objects.filter(name=cat):
+                Category.objects.create(
+                    name=cat
+                )

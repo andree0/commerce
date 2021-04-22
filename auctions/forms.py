@@ -82,16 +82,9 @@ class BidForm(forms.ModelForm):
         cleaned_data = super().clean()
         price = cleaned_data.get('price')
         auction = cleaned_data.get('auction')
-        if price <= auction.current_price or price <= auction.min_price:
-            self.add_error('price', "Your bid must be a higher than current price !")
-
-
-class WatchlistForm(forms.ModelForm):
-
-    class Meta:
-        model = Watchlist
-        fields = ('user', 'auction',)
-        widgets = {
-            'user': forms.HiddenInput,
-            'auction': forms.HiddenInput,
-        }
+        if not Bid.objects.filter(auction=auction):
+            if price < auction.min_price:
+                self.add_error('price', "Your bid must be the same or higher than current price !")
+        else:
+            if price <= auction.current_price:
+                self.add_error('price', "Your bid must be a higher than current price !")

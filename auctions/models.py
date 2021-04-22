@@ -40,8 +40,13 @@ class Auction(models.Model):
         if highest_bid:
             self.current_price = highest_bid['price__max']
         else:
-            self.current_price = null
+            self.current_price = self.min_price
         return self.current_price
+
+    def save(self, *args, **kwargs):
+        if not self.current_price:
+            self.current_price = self.min_price
+        super().save(*args, **kwargs)
 
 
 class Bid(models.Model):
