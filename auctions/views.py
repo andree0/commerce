@@ -11,7 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView
 from django.views.generic.base import View
 
-from .forms import AuctionForm, BidForm, RegisterForm
+from .forms import AuctionForm, BidForm, RegisterForm, WatchlistForm
 from .models import Auction, Bid, Category, User, Watchlist
 
 
@@ -103,6 +103,8 @@ class ListingsPageView(View):
         self.context['auction'] = auction
         if Watchlist.objects.filter(user=request.user, auction=auction):
             self.context['is_watch'] = True
+            form_watchlist = WatchlistForm(initial={'user': request.user, 'auction': auction})
+            self.context['form_watchlist'] = form_watchlist
         if auction.current_price:
             form = self.form_class(initial={'user': request.user, 'auction': auction,
                                             'price': round(float(auction.current_price) + 0.01, 2)})
@@ -132,5 +134,13 @@ class ListingsPageView(View):
         if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
+        if request.POST.get('add_to_watchlist'):
+            form_watchlist = WatchlistForm(request.POST)
+            if form_watchlist.is_valid():
+                Watchlist.objects.create(**form_watchlist.cleaned_data)
+        if request.POST.get('delete_from_watchlist'):
+            form_watchlist = WatchlistForm(request.POST)
+            if form_watchlist.is_valid():
+                Watchlist.objects.get(**form_watchlist.cleaned_data).delete()
 
         return render(self.request, self.template_name, self.context)

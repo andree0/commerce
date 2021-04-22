@@ -48,7 +48,7 @@ class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2,
-                                verbose_name='Your bid [$]')
+                                verbose_name='Your bid')
 
 
 class Comment(models.Model):

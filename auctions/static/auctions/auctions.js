@@ -11,15 +11,29 @@ labelRegister.forEach((el) => {
     el.className = "sr-only"
 })
 
-const eyeFill = document.querySelector("a#eye-fill");
-const eye = document.querySelector("a#eye");
+const formBid = document.querySelector("#bid_form");
+const buttonBid = formBid.querySelector("input[type='submit']");
+const inputPriceBid = document.querySelector("input[name='price']");
+const labelPrice = formBid.querySelector("label[for='id_price']");
+formBid.className = "d-inline-flex align-items-center m-2"
+labelPrice.className = "mb-0 mr-2"
+inputPriceBid.className = "form-control";
+const divInputGroup = document.createElement("div");
+divInputGroup.className = "input-group";
+const divInputGroupPrepend = document.createElement("div");
+divInputGroupPrepend.className = "input-group-prepend";
+const divInputGroupText = document.createElement("div");
+divInputGroupText.className = "input-group-text";
+divInputGroupText.innerText = "$"
+buttonBid.before(divInputGroup);
+// divInputGroup.appendChild(labelPrice);
+divInputGroup.appendChild(divInputGroupPrepend);
+divInputGroup.appendChild(inputPriceBid);
+divInputGroupPrepend.appendChild(divInputGroupText);
+divInputGroup.style.height = '100%';
+divInputGroup.style.minWidth = '150px';
+buttonBid.style.height = '38px';
+buttonBid.style.marginBottom = '0';
+labelPrice.style.width = '30%';
 
-eye.addEventListener('mouseover', (el) => {
-    el.target.innerHtml = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"28\" height=\"28\" fill=\"currentColor\" className=\"bi bi-eye-fill\"\n" +
-        "             viewBox=\"0 0 16 16\">\n" +
-        "            <path d=\"M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z\"/>\n" +
-        "            <path d=\"M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z\"/>\n" +
-        "        </svg>"
 
-
-})

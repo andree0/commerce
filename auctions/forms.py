@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
-from .models import Auction, Bid, User
+from .models import Auction, Bid, User, Watchlist
 from .validators import validate_password
 
 
@@ -84,3 +84,14 @@ class BidForm(forms.ModelForm):
         auction = cleaned_data.get('auction')
         if price <= auction.current_price or price <= auction.min_price:
             self.add_error('price', "Your bid must be a higher than current price !")
+
+
+class WatchlistForm(forms.ModelForm):
+
+    class Meta:
+        model = Watchlist
+        fields = ('user', 'auction',)
+        widgets = {
+            'user': forms.HiddenInput,
+            'auction': forms.HiddenInput,
+        }
