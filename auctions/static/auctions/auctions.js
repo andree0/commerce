@@ -12,7 +12,7 @@ labelRegister.forEach((el) => {
 })
 
 const formBid = document.querySelector("#bid_form");
-const buttonBid = formBid.querySelector("input[type='submit']");
+const buttonBid = formBid.querySelector("input[name='add_bid']");
 const inputPriceBid = document.querySelector("input[name='price']");
 const labelPrice = formBid.querySelector("label[for='id_price']");
 formBid.className = "d-inline-flex align-items-center m-2"

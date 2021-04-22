@@ -42,20 +42,12 @@ class CategoryListingsView(ListView):
 
 class WatchlistView(ListView):
     model = Auction
-    template_name = 'auctions/auction_list.html'
     paginate_by = AUCTIONS_PAGINATE_BY
+    extra_context = {'watchlist': True}
 
     def get_queryset(self):
-        return Watchlist.objects.filter(user=self.request.user).values('auction')
-
-
-class DeleteFromWatchlistView(DeleteView):
-    model = Watchlist
-    success_url = reverse_lazy('listings_details')
-
-
-class AddToWatchlistView(CreateView):
-    model = Watchlist
+        watchlist = Watchlist.objects.filter(user=self.request.user).values_list('auction')
+        return Auction.objects.filter(pk__in=watchlist)
 
 
 class RegisterView(CreateView):
@@ -134,13 +126,15 @@ class ListingsPageView(View):
         if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
-        if request.POST.get('add_to_watchlist'):
+        if request.POST.get("eye") == 'add_to_watchlist':
             form_watchlist = WatchlistForm(request.POST)
             if form_watchlist.is_valid():
                 Watchlist.objects.create(**form_watchlist.cleaned_data)
-        if request.POST.get('delete_from_watchlist'):
+        if request.POST.get("eye") == 'delete_from_watchlist':
             form_watchlist = WatchlistForm(request.POST)
             if form_watchlist.is_valid():
-                Watchlist.objects.get(**form_watchlist.cleaned_data).delete()
+                if Watchlist.objects.filter(user=request.user, auction=auction):
+                    Watchlist.objects.get(**form_watchlist.cleaned_data).delete()
+                    self.context['is_watch'] = False
 
         return render(self.request, self.template_name, self.context)
