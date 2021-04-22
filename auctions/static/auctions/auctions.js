@@ -26,7 +26,6 @@ const divInputGroupText = document.createElement("div");
 divInputGroupText.className = "input-group-text";
 divInputGroupText.innerText = "$"
 buttonBid.before(divInputGroup);
-// divInputGroup.appendChild(labelPrice);
 divInputGroup.appendChild(divInputGroupPrepend);
 divInputGroup.appendChild(inputPriceBid);
 divInputGroupPrepend.appendChild(divInputGroupText);
