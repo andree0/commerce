@@ -95,8 +95,6 @@ class ListingsPageView(View):
         self.context['auction'] = auction
         if Watchlist.objects.filter(user=request.user, auction=auction):
             self.context['is_watch'] = True
-            form_watchlist = WatchlistForm(initial={'user': request.user, 'auction': auction})
-            self.context['form_watchlist'] = form_watchlist
         if auction.current_price:
             form = self.form_class(initial={'user': request.user, 'auction': auction,
                                             'price': round(float(auction.current_price) + 0.01, 2)})
@@ -109,6 +107,13 @@ class ListingsPageView(View):
 
     def post(self, request, *args, **kwargs):
         auction = get_object_or_404(Auction, pk=kwargs['auction_pk'])
+        if request.POST.get("eye") == 'add_to_watchlist':
+            Watchlist.objects.create(user=request.user, auction=auction)
+            self.context['is_watch'] = True
+        if request.POST.get("eye") == 'delete_from_watchlist':
+            if Watchlist.objects.filter(user=request.user, auction=auction):
+                Watchlist.objects.get(user=request.user, auction=auction).delete()
+                self.context['is_watch'] = False
         if request.POST.get('add_bid'):
             form = self.form_class(request.POST)
             if form.is_valid():
@@ -126,15 +131,5 @@ class ListingsPageView(View):
         if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
-        if request.POST.get("eye") == 'add_to_watchlist':
-            form_watchlist = WatchlistForm(request.POST)
-            if form_watchlist.is_valid():
-                Watchlist.objects.create(**form_watchlist.cleaned_data)
-        if request.POST.get("eye") == 'delete_from_watchlist':
-            form_watchlist = WatchlistForm(request.POST)
-            if form_watchlist.is_valid():
-                if Watchlist.objects.filter(user=request.user, auction=auction):
-                    Watchlist.objects.get(**form_watchlist.cleaned_data).delete()
-                    self.context['is_watch'] = False
 
         return render(self.request, self.template_name, self.context)
