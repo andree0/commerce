@@ -24,7 +24,7 @@ class RegisterForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Email Address'}),
-            'address': forms.TextInput(attrs={'placeholder': 'Address (optional)'}),
+            'address': forms.TextInput(attrs={'placeholder': 'Delivery Address (optional)'}),
         }
 
     def clean_username(self):

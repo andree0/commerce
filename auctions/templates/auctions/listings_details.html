@@ -52,7 +52,22 @@
         </form>
     {% endif %}
 {% else %}
-    <p class="text-danger">Listing is closed.</p>
+    {% if user.is_authenticated and user == winner %}
+        <p class="text-success">Congratulation <strong>{{ winner.username }}</strong>.
+            You are winner this auctions !</p>
+        <p class="text-muted">If you did not provide a delivery address during registration,
+            please contact the auction owner.</p>
+    {% elif user.is_authenticated and user == auction.owner %}
+        <p><strong>{{ winner.username }}</strong> won this auction.</p>
+        <ul>Winner Data To Contact:
+            <li>First Name: {{ winner.first_name }}</li>
+            <li>Last Name: {{ winner.last_name }}</li>
+            <li>Email Address: {{ winner.email }}</li>
+            {% if winner.address %}<li>Delivery Address: {{ winner.address }}</li>{% endif %}
+        </ul>
+    {% else %}
+        <p class="text-danger">Auction is closed.</p>
+    {% endif %}
 {% endif %}
 <div class="mt-3">
     <h4>Details</h4>
@@ -61,7 +76,11 @@
         <li>
             Category:
             {% for cat in auction.category.all %}
-            {{ cat.name }},
+                {% if cat == auction.category.all.0 %}
+                    {{ cat.name }}
+                {% else %}
+                    | {{ cat.name }}
+                {% endif %}
             {% empty %}
             No Category Listed
             {% endfor %}

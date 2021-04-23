@@ -141,5 +141,8 @@ class ListingsPageView(View):
         if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
+            win_bid = Bid.objects.filter(auction=auction).order_by('-price').first()
+            self.context['winner'] = win_bid.user
+            self.context['auction'] = auction
 
         return render(self.request, self.template_name, self.context)

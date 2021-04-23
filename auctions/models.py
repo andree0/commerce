@@ -10,7 +10,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=64)
     address = models.CharField(max_length=255, blank=True, null=True,
-                               verbose_name='Address (optional)')
+                               verbose_name='Delivery address (optional)')
 
 
 class Category(models.Model):
@@ -34,6 +34,7 @@ class Auction(models.Model):
     active = models.BooleanField(default=True)
     created = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    # winner = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
 
     def get_current_price(self):
         highest_bid = Bid.objects.filter(auction=self).aggregate(models.Max('price'))
