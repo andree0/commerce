@@ -70,4 +70,16 @@ def test_create_auction_to_login_view(client):
     assert response.status_code == 302
 
 
+@pytest.mark.django_db
+def test_watchlist_to_login_view(client):
+    response = client.get('/watchlist/')
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_your_auctions_to_login_view(client):
+    response = client.get('/your_auctions/')
+    assert response.status_code == 302
+
+
 # Check status code 201 - method POST ------------------------------------

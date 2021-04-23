@@ -41,19 +41,21 @@ class CategoryListingsView(ListView):
         return Auction.objects.filter(category=category, active=True)
 
 
-class WatchlistView(ListView):
+class WatchlistView(LoginRequiredMixin, ListView):
     model = Auction
     paginate_by = AUCTIONS_PAGINATE_BY
     extra_context = {'watchlist': True}
+    login_url = '/login/'
 
     def get_queryset(self):
         watchlist = Watchlist.objects.filter(user=self.request.user).values_list('auction')
         return Auction.objects.filter(pk__in=watchlist)
 
 
-class YourAuctionsView(ListView):
+class YourAuctionsView(LoginRequiredMixin, ListView):
     model = Auction
     paginate_by = AUCTIONS_PAGINATE_BY
+    login_url = '/login/'
 
     def get_queryset(self):
         return Auction.objects.filter(owner=self.request.user)
