@@ -34,7 +34,6 @@ class Auction(models.Model):
     active = models.BooleanField(default=True)
     created = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    # winner = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
 
     def get_current_price(self):
         highest_bid = Bid.objects.filter(auction=self).aggregate(models.Max('price'))
