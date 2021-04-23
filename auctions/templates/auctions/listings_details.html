@@ -59,7 +59,7 @@
             please contact the auction owner.</p>
     {% elif user.is_authenticated and user == auction.owner %}
         <p><strong>{{ winner.username }}</strong> won this auction.</p>
-        <ul>Winner Data To Contact:
+        <ul class="text-info">Winner Data To Contact:
             <li>First Name: {{ winner.first_name }}</li>
             <li>Last Name: {{ winner.last_name }}</li>
             <li>Email Address: {{ winner.email }}</li>

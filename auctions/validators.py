@@ -1,11 +1,5 @@
 from django.core.exceptions import ValidationError
 
-from .models import Auction, Bid
-
-
-def validate_price_bid(value):
-    pass
-
 
 def validate_password(value):
     if value.isdigit():

@@ -15,6 +15,7 @@ urlpatterns = [
     path("all_listings/", views.AllListingsView.as_view(), name="all_listings"),
     path("category/<str:category_name>/", views.CategoryListingsView.as_view(), name="category_listings"),
     path("watchlist/", views.WatchlistView.as_view(), name="watchlist"),
+    path("your_auctions/", views.YourAuctionsView.as_view(), name="your_auctions"),
 ]
 
 if settings.DEBUG:

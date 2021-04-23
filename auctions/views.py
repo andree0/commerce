@@ -51,6 +51,14 @@ class WatchlistView(ListView):
         return Auction.objects.filter(pk__in=watchlist)
 
 
+class YourAuctionsView(ListView):
+    model = Auction
+    paginate_by = AUCTIONS_PAGINATE_BY
+
+    def get_queryset(self):
+        return Auction.objects.filter(owner=self.request.user)
+
+
 class RegisterView(CreateView):
     model = User
     form_class = RegisterForm
@@ -105,6 +113,11 @@ class ListingsPageView(View):
                 self.context['is_watch'] = True
             else:
                 self.context['is_watch'] = False
+            try:
+                win_bid = Bid.objects.filter(auction=auction).order_by('-price').first()
+                self.context['winner'] = win_bid.user
+            except ValueError:
+                pass
         if auction.current_price:
             form = self.form_class(initial={'user': request.user, 'auction': auction,
                                             'price': round(float(auction.current_price) + 0.01, 2)})
