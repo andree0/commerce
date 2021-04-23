@@ -7,25 +7,50 @@ from auctions.models import Auction, User
 fake = Faker("en-US")
 
 
+def fake_user_data():
+    """Generate a dict of user data"""
+    nr = randint(1, 100)
+    return {
+        'username': f'user_{nr}_{fake.safe_color_name()}',
+        'first_name': fake.first_name(),
+        'last_name': fake.last_name(),
+        'email': f'person{nr}@example.com',
+        'password': f'alaMAkota{nr}!',
+        'address': fake.address()
+    }
+
+
 def create_fake_user():
     """Generate new fake user and save to database."""
+    user_data = fake_user_data()
     return User.objects.create_user(
-            username=f'user_1_{fake.safe_color_name()}',
-            first_name=fake.first_name(),
-            last_name=fake.last_name(),
-            email=f'person1@example.com',
-            password=f'alaMAkota1!',
-            address=fake.address()
+            username=user_data['username'],
+            first_name=user_data['first_name'],
+            last_name=user_data['last_name'],
+            email=user_data['email'],
+            password=user_data['password'],
+            address=user_data['address']
         )
+
+
+def fake_auction_data():
+    """Generate a dict of auction data"""
+    return {
+        'title': fake.sentence(nb_words=3),
+        'description': fake.sentence(nb_words=3),
+        'min_price': randint(1, 50) - (randint(1, 100)/100),
+        'owner': create_fake_user()
+    }
 
 
 def create_fake_auction():
     """Generate new fake auction and save to database."""
+    auction_data = fake_auction_data()
     return Auction.objects.create(
-        title=fake.sentence(nb_words=3),
-        description=fake.sentence(nb_words=10),
-        min_price=randint(1, 50) - (randint(1, 100)/100),
-        owner=create_fake_user()
+        title=auction_data['title'],
+        description=auction_data['description'],
+        min_price=auction_data['min_price'],
+        owner=auction_data['owner']
     )
 
 

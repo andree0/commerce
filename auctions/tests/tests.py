@@ -1,6 +1,7 @@
 import pytest
 
-from auctions.models import Auction
+from auctions.models import User
+from .utils import fake_auction_data, fake_user_data
 
 
 # Check status code 200 - method GET ------------------------------------
@@ -83,3 +84,25 @@ def test_your_auctions_to_login_view(client):
 
 
 # Check status code 201 - method POST ------------------------------------
+
+# @pytest.mark.django_db
+# def test_registration_user(client):
+#     user_data = fake_user_data()
+#     response = client.post('/register/', user_data)
+#     assert response.status_code == 302
+#     users_before = User.objects.count()
+#     assert User.objects.count() == users_before + 1
+#     for key, value in user_data.items():
+#         assert key in response.data
+#         if isinstance(value, list):
+#             # Compare contents regardless of their order
+#             assert len(response.data[key]) == len(value)
+#         else:
+#             assert response.data[key] == value
+
+# @pytest.mark.django_db
+# def test_get_create_auction_view(user, client):
+#     client.force_login(user)
+#     auction_data = fake_auction_data()
+#     response = client.get('/create_auction/', auction_data)
+#     assert response.status_code == 302
