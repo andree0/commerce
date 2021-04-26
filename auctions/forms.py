@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from .models import Auction, Bid, User
+from .models import Auction, Bid, CustomUser
 from .validators import validate_password
 
 
@@ -15,7 +15,7 @@ class RegisterForm(forms.ModelForm):
     ))
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'email',
                   'password', 'confirmation_password', 'address', )
         widgets = {

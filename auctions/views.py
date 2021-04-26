@@ -7,7 +7,7 @@ from django.views.generic import CreateView, ListView
 from django.views.generic.base import View
 
 from .forms import AuctionForm, BidForm, RegisterForm
-from .models import Auction, Bid, Category, User, Watchlist
+from .models import Auction, Bid, Category, CustomUser, Watchlist
 
 
 AUCTIONS_PAGINATE_BY = 10
@@ -55,7 +55,7 @@ class YourAuctionsView(LoginRequiredMixin, ListView):
 
 
 class RegisterView(CreateView):
-    model = User
+    model = CustomUser
     form_class = RegisterForm
     template_name = 'auctions/register.html'
     success_url = reverse_lazy('index')
@@ -82,7 +82,7 @@ class CreateNewAuctionView(LoginRequiredMixin, CreateView):
         form_kwargs = super(CreateNewAuctionView, self).get_form_kwargs()
         form_kwargs.update({
             "initial": {
-                "owner": User.objects.get(username=user.username)
+                "owner": CustomUser.objects.get(username=user.username)
             }
         })
         return form_kwargs

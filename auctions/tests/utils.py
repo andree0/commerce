@@ -2,7 +2,7 @@ from faker import Faker
 from random import randint
 
 
-from auctions.models import Auction, User
+from auctions.models import Auction, CustomUser
 
 fake = Faker("en-US")
 
@@ -23,7 +23,7 @@ def fake_user_data():
 def create_fake_user():
     """Generate new fake user and save to database."""
     user_data = fake_user_data()
-    return User.objects.create_user(
+    return CustomUser.objects.create_user(
             username=user_data['username'],
             first_name=user_data['first_name'],
             last_name=user_data['last_name'],
@@ -57,7 +57,7 @@ def create_fake_auction():
 def create_n_fake_users(n):
     """Generate 'n' new fake users and save to database."""
     for i in range(n):
-        User.objects.create_user(
+        CustomUser.objects.create_user(
             username=f'user_{i}_{fake.safe_color_name()}',
             first_name=fake.first_name(),
             last_name=fake.last_name(),
@@ -65,4 +65,4 @@ def create_n_fake_users(n):
             password=f'alaMAkota{i}!',
             address=fake.address()
         )
-    return User.objects.all()
+    return CustomUser.objects.all()

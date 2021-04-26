@@ -1,6 +1,7 @@
 import pytest
+from urllib.parse import urlencode
 
-from auctions.models import User
+from auctions.models import CustomUser
 from .utils import fake_auction_data, fake_user_data
 
 
@@ -46,7 +47,7 @@ def test_get_watchlist_view(user, client):
 
 @pytest.mark.django_db
 def test_get_your_auctions_view(user, client):
-    client.login(username=user.username, password=user.password)
+    client.login(username=user.username, password='strongPassword100%')
     response = client.get('/your_auctions/')
     assert response.status_code == 200
 
@@ -87,11 +88,11 @@ def test_your_auctions_to_login_view(client):
 
 @pytest.mark.django_db
 def test_registration_user(client):
-    users_before = User.objects.count()
-    user_data = fake_user_data()
-    response = client.post('/register/', user_data)
+    users_before = CustomUser.objects.count()
+    data = urlencode(fake_user_data())
+    response = client.post('/register/', data, content_type="application/x-www-form-urlencoded")
     assert response.status_code == 200
-    assert User.objects.count() == users_before + 1
+    assert CustomUser.objects.count() == users_before + 1
     for key, value in user_data.items():
         assert key in response.data
         if isinstance(value, list):

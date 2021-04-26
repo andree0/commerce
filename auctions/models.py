@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 
 
-class User(AbstractUser):
+class CustomUser(AbstractUser):
     username = models.CharField(max_length=64, unique=True)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
@@ -33,7 +33,7 @@ class Auction(models.Model):
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     active = models.BooleanField(default=True)
     created = models.DateField(auto_now_add=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def get_current_price(self):
         highest_bid = Bid.objects.filter(auction=self).aggregate(
@@ -52,18 +52,18 @@ class Auction(models.Model):
 
 
 class Bid(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2,
                                 verbose_name='Your bid')
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     description = models.TextField()
 
 
 class Watchlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)

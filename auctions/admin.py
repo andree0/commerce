@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Auction, Bid, Category, Comment, User, Watchlist
+from .models import Auction, Bid, Category, Comment, CustomUser, Watchlist
 
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
     pass
 
 
