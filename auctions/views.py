@@ -114,7 +114,7 @@ class ListingsPageView(View):
                 win_bid = Bid.objects.filter(
                     auction=auction).order_by('-price').first()
                 self.context['winner'] = win_bid.user
-            except ValueError:
+            except (ValueError, AttributeError):
                 pass
         if auction.current_price:
             form = self.form_class(initial={
@@ -159,7 +159,8 @@ class ListingsPageView(View):
             auction.save()
             win_bid = Bid.objects.filter(
                 auction=auction).order_by('-price').first()
-            self.context['winner'] = win_bid.user
+            if win_bid:
+                self.context['winner'] = win_bid.user
             self.context['auction'] = auction
 
         return render(self.request, self.template_name, self.context)
