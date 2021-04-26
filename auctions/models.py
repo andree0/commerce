@@ -7,7 +7,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=64, unique=True)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, blank=True)
     password = models.CharField(max_length=64)
     address = models.CharField(max_length=255, blank=True, null=True,
                                verbose_name='Delivery address (optional)')
@@ -36,7 +36,9 @@ class Auction(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_current_price(self):
-        highest_bid = Bid.objects.filter(auction=self).aggregate(models.Max('price'))
+        highest_bid = Bid.objects.filter(auction=self).aggregate(
+            models.Max('price')
+        )
         if highest_bid:
             self.current_price = highest_bid['price__max']
         else:

@@ -26,7 +26,7 @@ def test_get_register_view(client):
 
 @pytest.mark.django_db
 def test_get_create_auction_view(user, client):
-    client.force_login(user)
+    client.login(username=user.username, password='strongPassword100%')
     response = client.get('/create_auction/')
     assert response.status_code == 200
 
@@ -39,21 +39,21 @@ def test_get_all_listings_view(client):
 
 @pytest.mark.django_db
 def test_get_watchlist_view(user, client):
-    client.force_login(user)
+    client.login(username=user.username, password='strongPassword100%')
     response = client.get('/watchlist/')
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
 def test_get_your_auctions_view(user, client):
-    client.force_login(user)
+    client.login(username=user.username, password=user.password)
     response = client.get('/your_auctions/')
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_get_your_auctions_view(auction, client):
-    response = client.get(f'/listings_details/{ auction.pk }/')
+def test_get_listings_details_view(auction, client):
+    response = client.get(f'/listings_details/{auction.pk}/')
     assert response.status_code == 200
 
 
@@ -85,24 +85,25 @@ def test_your_auctions_to_login_view(client):
 
 # Check status code 201 - method POST ------------------------------------
 
-# @pytest.mark.django_db
-# def test_registration_user(client):
-#     user_data = fake_user_data()
-#     response = client.post('/register/', user_data)
-#     assert response.status_code == 302
-#     users_before = User.objects.count()
-#     assert User.objects.count() == users_before + 1
-#     for key, value in user_data.items():
-#         assert key in response.data
-#         if isinstance(value, list):
-#             # Compare contents regardless of their order
-#             assert len(response.data[key]) == len(value)
-#         else:
-#             assert response.data[key] == value
+@pytest.mark.django_db
+def test_registration_user(client):
+    users_before = User.objects.count()
+    user_data = fake_user_data()
+    response = client.post('/register/', user_data)
+    assert response.status_code == 200
+    assert User.objects.count() == users_before + 1
+    for key, value in user_data.items():
+        assert key in response.data
+        if isinstance(value, list):
+            # Compare contents regardless of their order
+            assert len(response.data[key]) == len(value)
+        else:
+            assert response.data[key] == value
 
-# @pytest.mark.django_db
-# def test_get_create_auction_view(user, client):
-#     client.force_login(user)
-#     auction_data = fake_auction_data()
-#     response = client.get('/create_auction/', auction_data)
-#     assert response.status_code == 302
+
+@pytest.mark.django_db
+def test_create_auction(user, client):
+    client.force_login(user)
+    auction_data = fake_auction_data()
+    response = client.post('/create_auction/', auction_data)
+    assert response.status_code == 200

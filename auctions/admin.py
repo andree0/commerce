@@ -1,9 +1,32 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import Auction, Bid, Category, Comment, User
+from .models import Auction, Bid, Category, Comment, User, Watchlist
 
-admin.site.register(User, UserAdmin)
-admin.site.register(Auction)
-admin.site.register(Category)
-admin.site.register(Comment)
 
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Auction)
+class AuctionAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Bid)
+class BidAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Watchlist)
+class WatchlistAdmin(admin.ModelAdmin):
+    pass

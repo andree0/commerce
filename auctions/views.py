@@ -1,15 +1,9 @@
-from decimal import Decimal
-
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.images import get_image_dimensions
-from django.db import IntegrityError
-from django.db.models import Max
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView
 from django.views.generic.base import View
 
 from .forms import AuctionForm, BidForm, RegisterForm
@@ -48,7 +42,8 @@ class WatchlistView(LoginRequiredMixin, ListView):
     login_url = '/login/'
 
     def get_queryset(self):
-        watchlist = Watchlist.objects.filter(user=self.request.user).values_list('auction')
+        watchlist = Watchlist.objects.filter(
+            user=self.request.user).values_list('auction')
         return Auction.objects.filter(pk__in=watchlist)
 
 
@@ -116,16 +111,19 @@ class ListingsPageView(View):
             else:
                 self.context['is_watch'] = False
             try:
-                win_bid = Bid.objects.filter(auction=auction).order_by('-price').first()
+                win_bid = Bid.objects.filter(
+                    auction=auction).order_by('-price').first()
                 self.context['winner'] = win_bid.user
             except ValueError:
                 pass
         if auction.current_price:
-            form = self.form_class(initial={'user': request.user, 'auction': auction,
-                                            'price': round(float(auction.current_price) + 0.01, 2)})
+            form = self.form_class(initial={
+                'user': request.user, 'auction': auction,
+                'price': round(float(auction.current_price) + 0.01, 2)})
         else:
-            form = self.form_class(initial={'user': request.user, 'auction': auction,
-                                            'price': round(float(auction.min_price) + 0.01, 2)})
+            form = self.form_class(initial={
+                'user': request.user, 'auction': auction,
+                'price': round(float(auction.min_price) + 0.01, 2)})
         self.context['form'] = form
 
         return render(request, self.template_name, self.context)
@@ -137,7 +135,10 @@ class ListingsPageView(View):
             self.context['is_watch'] = True
         if request.POST.get("eye") == 'delete_from_watchlist':
             if Watchlist.objects.filter(user=request.user, auction=auction):
-                Watchlist.objects.get(user=request.user, auction=auction).delete()
+                Watchlist.objects.get(
+                    user=request.user,
+                    auction=auction
+                ).delete()
                 self.context['is_watch'] = False
         if request.POST.get('add_bid'):
             form = self.form_class(request.POST)
@@ -156,7 +157,8 @@ class ListingsPageView(View):
         if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
-            win_bid = Bid.objects.filter(auction=auction).order_by('-price').first()
+            win_bid = Bid.objects.filter(
+                auction=auction).order_by('-price').first()
             self.context['winner'] = win_bid.user
             self.context['auction'] = auction
 

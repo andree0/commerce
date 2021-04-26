@@ -2,7 +2,6 @@ import pytest
 
 from django.test import Client
 
-from auctions.models import Auction, User
 from .utils import create_n_fake_users, create_fake_auction, create_fake_user
 
 
