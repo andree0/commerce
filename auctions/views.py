@@ -39,7 +39,6 @@ class WatchlistView(LoginRequiredMixin, ListView):
     model = Auction
     paginate_by = AUCTIONS_PAGINATE_BY
     extra_context = {'watchlist': True}
-    login_url = '/login/'
 
     def get_queryset(self):
         watchlist = Watchlist.objects.filter(
@@ -50,7 +49,6 @@ class WatchlistView(LoginRequiredMixin, ListView):
 class YourAuctionsView(LoginRequiredMixin, ListView):
     model = Auction
     paginate_by = AUCTIONS_PAGINATE_BY
-    login_url = '/login/'
 
     def get_queryset(self):
         return Auction.objects.filter(owner=self.request.user)
@@ -74,7 +72,6 @@ class RegisterView(CreateView):
 
 
 class CreateNewAuctionView(LoginRequiredMixin, CreateView):
-    login_url = '/login/'
     form_class = AuctionForm
     model = Auction
     success_url = reverse_lazy('index')
