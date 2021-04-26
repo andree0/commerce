@@ -1,7 +1,7 @@
 import pytest
 from urllib.parse import urlencode
 
-from auctions.models import CustomUser
+from auctions.models import Auction, CustomUser
 from .utils import fake_auction_data, fake_user_data
 
 
@@ -104,7 +104,10 @@ def test_registration_user(client):
 
 @pytest.mark.django_db
 def test_create_auction(user, client):
-    client.force_login(user)
+    client.login(username=user.username, password="strongPassword100%")
+    auctions_before = Auction.objects.count()
     auction_data = fake_auction_data()
     response = client.post('/create_auction/', auction_data)
     assert response.status_code == 200
+    assert Auction.objects.count() == auctions_before + 1
+
