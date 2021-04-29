@@ -3,7 +3,6 @@ from random import choice, randint
 
 
 from auctions.models import Auction, Category, CustomUser
-from auctions.management.commands.create_categories import CATEGORIES
 
 fake = Faker("en-US")
 
@@ -15,7 +14,7 @@ def fake_user_data():
         'username': f'user_{nr}_{fake.safe_color_name()}',
         'first_name': fake.first_name(),
         'last_name': fake.last_name(),
-        'email': f'person{nr}@example.com',
+        'email': f'{fake.word()}{nr}@example.com',
         'password': 'strongPassword100%',
         'confirmation_password': 'strongPassword100%',
         'address': fake.address()
@@ -35,17 +34,26 @@ def create_fake_user():
         )
 
 
+def fake_data_category():
+    """Generate a dict of category data"""
+    return {'name': fake.word()}
+
+
+def create_fake_categories():
+    """Generate 10 new fake categories and save to database"""
+    for _ in range(10):
+        category = fake_data_category()
+        Category.objects.create(name=category['name'])
+    return Category.objects.all()
+
+
 def fake_auction_data():
     """Generate a dict of auction data"""
-    for cat in CATEGORIES:
-        if not Category.objects.filter():
-            Category.objects.create(name=cat)
     return {
         'title': fake.sentence(nb_words=3),
         'description': fake.sentence(nb_words=3),
         'min_price': randint(1, 50) - (randint(1, 100)/100),
-        'category': choice(Category.objects.all()),
-        'owner': create_fake_user()
+        'owner': create_fake_user(),
     }
 
 
@@ -56,10 +64,8 @@ def create_fake_auction():
         title=auction_data['title'],
         description=auction_data['description'],
         min_price=auction_data['min_price'],
-        owner=auction_data['owner']
+        owner=auction_data['owner'],
     )
-    fake_auction.category.set((auction_data['category'], ))
-    fake_auction.save()
     return fake_auction
 
 

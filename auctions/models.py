@@ -29,7 +29,7 @@ class Auction(models.Model):
     current_price = models.DecimalField(max_digits=7, decimal_places=2,
                                         verbose_name='Current price [$]',
                                         null=True)
-    category = models.ManyToManyField(Category)
+    category = models.ManyToManyField(Category, blank=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     active = models.BooleanField(default=True)
     created = models.DateField(auto_now_add=True)
