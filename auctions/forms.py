@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from .models import Auction, Bid, CustomUser
-from .validators import validate_password
+from auctions.models import Auction, Bid, CustomUser
+from auctions.validators import validate_password
 
 
 class RegisterForm(forms.ModelForm):

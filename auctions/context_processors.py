@@ -1,4 +1,4 @@
-from .models import Auction, Category, Watchlist
+from auctions.models import Auction, Category, Watchlist
 
 
 def metadata(request):

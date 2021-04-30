@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.images import get_image_dimensions
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 from django.views.generic.base import View
 
-from .forms import AuctionForm, BidForm, RegisterForm
-from .models import Auction, Bid, Category, CustomUser, Watchlist
+from auctions.forms import AuctionForm, BidForm, RegisterForm
+from auctions.models import Auction, Bid, Category, CustomUser, Watchlist
 
 
 AUCTIONS_PAGINATE_BY = 10
@@ -15,13 +15,14 @@ AUCTIONS_PAGINATE_BY = 10
 
 class AllListingsView(ListView):
     model = Auction
+    ordering = '-created'
     extra_context = {'all': True}
     paginate_by = AUCTIONS_PAGINATE_BY
 
 
 class IndexView(ListView):
     model = Auction
-    queryset = Auction.objects.filter(active=True)
+    queryset = Auction.objects.filter(active=True).order_by('-created')
     extra_context = {'categories': Category.objects.all()}
     paginate_by = AUCTIONS_PAGINATE_BY
 
@@ -32,7 +33,8 @@ class CategoryListingsView(ListView):
 
     def get_queryset(self):
         category = Category.objects.get(name=self.kwargs['category_name'])
-        return Auction.objects.filter(category=category, active=True)
+        return Auction.objects.filter(category=category, active=True
+                                      ).order_by('-created')
 
 
 class WatchlistView(LoginRequiredMixin, ListView):
@@ -43,7 +45,7 @@ class WatchlistView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         watchlist = Watchlist.objects.filter(
             user=self.request.user).values_list('auction')
-        return Auction.objects.filter(pk__in=watchlist)
+        return Auction.objects.filter(pk__in=watchlist).order_by('-created')
 
 
 class YourAuctionsView(LoginRequiredMixin, ListView):
@@ -51,7 +53,8 @@ class YourAuctionsView(LoginRequiredMixin, ListView):
     paginate_by = AUCTIONS_PAGINATE_BY
 
     def get_queryset(self):
-        return Auction.objects.filter(owner=self.request.user)
+        return Auction.objects.filter(owner=self.request.user
+                                      ).order_by('-created')
 
 
 class RegisterView(CreateView):

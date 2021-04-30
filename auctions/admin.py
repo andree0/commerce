@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Auction, Bid, Category, Comment, CustomUser, Watchlist
+
+from auctions.models import (
+    Auction,
+    Bid,
+    Category,
+    Comment,
+    CustomUser,
+    Watchlist,
+)
 
 
 @admin.register(CustomUser)

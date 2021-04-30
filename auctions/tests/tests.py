@@ -1,8 +1,7 @@
 import pytest
-from urllib.parse import urlencode
 
 from auctions.models import Auction, Category, CustomUser
-from .utils import fake_auction_data, fake_user_data
+from auctions.tests.utils import fake_auction_data, fake_user_data
 
 
 # Check status code 200 - method GET ---------------------------------------
@@ -86,15 +85,6 @@ def test_your_auctions_to_login_view(client):
 
 # Check status code 302 - Found - Redirection - method POST -----------------
 
-# @pytest.mark.django_db
-# def test_registration_user(client):
-#     users_before = CustomUser.objects.count()
-#     user_data = urlencode(fake_user_data())
-#     response = client.post('/register/', data=user_data,
-#                            content_type="application/x-www-form-urlencoded")
-#     assert response.status_code == 302
-#     assert CustomUser.objects.count() == users_before + 1
-
 
 @pytest.mark.django_db
 def test_registration_user(client):
@@ -106,35 +96,12 @@ def test_registration_user(client):
     assert CustomUser.objects.count() == users_before + 1
 
 
-# @pytest.mark.django_db
-# def test_create_auction(user, client):
-#     client.login(username=user.username, password="strongPassword100%")
-#     auctions_before = Auction.objects.count()
-#     auction_data = urlencode(fake_auction_data())
-#     response = client.post('/create_auction/', data=auction_data,
-#                            content_type="application/x-www-form-urlencoded")
-#     assert response.status_code == 302
-#     assert Auction.objects.count() == auctions_before + 1
-
-
-# @pytest.mark.django_db
-# def test_create_auction(user, client):
-#     client.login(username=user.username, password="strongPassword100%")
-#     auctions_before = Auction.objects.count()
-#     auction_data = fake_auction_data()
-#     response = client.post('/create_auction/', data=auction_data,
-#                            format='json')
-#     assert response.status_code == 302
-#     assert Auction.objects.count() == auctions_before + 1
-
-
 @pytest.mark.django_db
 def test_create_auction(user, client):
     client.login(username=user.username, password="strongPassword100%")
     auctions_before = Auction.objects.count()
-    auction_data = Auction(title='vxdfdfdsfdsf', description='ndfmdnfbdnbfd',
-                           min_price=54, owner=user)
+    auction_data = fake_auction_data()
     response = client.post('/create_auction/', data=auction_data,
-                           content_type="application/x-www-form-urlencoded")
+                           format='json')
     assert response.status_code == 302
     assert Auction.objects.count() == auctions_before + 1

@@ -49,11 +49,13 @@ def create_fake_categories():
 
 def fake_auction_data():
     """Generate a dict of auction data"""
+    categories = create_fake_categories()
     return {
         'title': fake.sentence(nb_words=3),
         'description': fake.sentence(nb_words=3),
         'min_price': randint(1, 50) - (randint(1, 100)/100),
-        'owner': create_fake_user(),
+        'category': [categories[1].pk, categories[5].pk, ],
+        'owner': create_fake_user().pk,
     }
 
 
@@ -64,7 +66,7 @@ def create_fake_auction():
         title=auction_data['title'],
         description=auction_data['description'],
         min_price=auction_data['min_price'],
-        owner=auction_data['owner'],
+        owner=CustomUser.objects.get(pk=auction_data['owner']),
     )
     return fake_auction
 
