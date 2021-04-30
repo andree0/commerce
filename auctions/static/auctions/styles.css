@@ -4,12 +4,12 @@ body {
 
 .link_detail, .link_detail:hover {
     text-decoration: none;
-    color: black;
+    color: #000000;
 }
 
 .listing {
     flex-shrink: 0;
-    border: lightgrey 1px solid;
+    border: #d3d3d3 1px solid;
 }
 
 .listing img {

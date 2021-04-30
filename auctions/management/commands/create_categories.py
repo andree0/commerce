@@ -4,17 +4,26 @@ from auctions.models import Category
 
 CATEGORIES = [
     'AGD&RTV',
+    'antiques',
     'art',
     'automotive',
+    'beauty',
     'books',
     'children',
+    'culture',
     'DIY',
     'electronics',
+    'entertainment',
     'fashion',
+    'furniture',
     'games',
     'garden',
+    'health',
     'home',
     'music',
+    'real estate',
+    'sport',
+    'tourism',
     'toys',
     'other'
 ]

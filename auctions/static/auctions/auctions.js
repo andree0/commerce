@@ -34,5 +34,3 @@ divInputGroup.style.minWidth = '150px';
 buttonBid.style.height = '38px';
 buttonBid.style.marginBottom = '0';
 labelPrice.style.width = '30%';
-
-

@@ -1,5 +1,5 @@
 from faker import Faker
-from random import choice, randint
+from random import randint
 
 
 from auctions.models import Auction, Category, CustomUser

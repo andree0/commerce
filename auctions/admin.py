@@ -12,7 +12,7 @@ from auctions.models import (
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    pass
+    fields = ('username', 'first_name', 'last_name', 'email', 'address', )
 
 
 @admin.register(Category)
@@ -22,7 +22,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Auction)
 class AuctionAdmin(admin.ModelAdmin):
-    pass
+    fields = ('title', 'description', 'min_price', 'category', 'image', )
 
 
 @admin.register(Bid)

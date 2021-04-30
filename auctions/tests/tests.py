@@ -1,6 +1,6 @@
 import pytest
 
-from auctions.models import Auction, Category, CustomUser
+from auctions.models import Auction, CustomUser
 from auctions.tests.utils import fake_auction_data, fake_user_data
 
 
