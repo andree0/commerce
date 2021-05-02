@@ -36,6 +36,11 @@ class Auction(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def get_current_price(self):
+        """
+        Checks if the Auction instance has any bids and returns the highest,
+        otherwise assigns self.min_price as self.current_price.
+        :return: self.current_price
+        """
         highest_bid = Bid.objects.filter(auction=self).aggregate(
             models.Max('price')
         )

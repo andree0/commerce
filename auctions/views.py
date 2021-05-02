@@ -44,6 +44,11 @@ class CategoryListingsView(ListView):
     paginate_by = AUCTIONS_PAGINATE_BY
 
     def get_queryset(self):
+        """
+        Return the list of items for this view.
+        The return value must be an iterable and may be an instance of
+        `QuerySet` in which case `QuerySet` specific behavior will be enabled.
+        """
         category = Category.objects.get(name=self.kwargs['category_name'])
         return Auction.objects.filter(category=category, active=True
                                       ).order_by('-created')
@@ -55,6 +60,11 @@ class WatchlistView(LoginRequiredMixin, ListView):
     extra_context = {'watchlist': True}
 
     def get_queryset(self):
+        """
+        Return the list of items for this view.
+        The return value must be an iterable and may be an instance of
+        `QuerySet` in which case `QuerySet` specific behavior will be enabled.
+        """
         watchlist = Watchlist.objects.filter(
             user=self.request.user).values_list('auction')
         return Auction.objects.filter(pk__in=watchlist).order_by('-created')
@@ -65,6 +75,11 @@ class YourAuctionsView(LoginRequiredMixin, ListView):
     paginate_by = AUCTIONS_PAGINATE_BY
 
     def get_queryset(self):
+        """
+        Return the list of items for this view.
+        The return value must be an iterable and may be an instance of
+        `QuerySet` in which case `QuerySet` specific behavior will be enabled.
+        """
         return Auction.objects.filter(owner=self.request.user
                                       ).order_by('-created')
 
@@ -92,6 +107,7 @@ class CreateNewAuctionView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('index')
 
     def get_form_kwargs(self):
+        """Return the keyword arguments for instantiating the form."""
         user = self.request.user
 
         form_kwargs = super(CreateNewAuctionView, self).get_form_kwargs()
@@ -109,6 +125,7 @@ class ListingsPageView(View):
     context = {}
 
     def get(self, request, auction_pk, *args, **kwargs):
+        """Handle GET requests: instantiate a blank version of the form."""
         auction = get_object_or_404(Auction, pk=auction_pk)
 
         try:
@@ -154,6 +171,10 @@ class ListingsPageView(View):
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
         auction = get_object_or_404(Auction, pk=kwargs['auction_pk'])
 
         if request.POST.get("eye") == 'add_to_watchlist':
