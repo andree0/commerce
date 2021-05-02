@@ -38,24 +38,30 @@
 <div class="my-2 ml-3">Description: {{ auction.description }}</div>
 {% endif %}
 <div>
-    <h3 class="font-weight-bold">${{ auction.current_price|floatformat:2 }}</h3>
+    <h3 class="font-weight-bold">
+        ${{ auction.current_price|floatformat:2 }}
+    </h3>
 </div>
 {% if auction.active %}
     {% if user.is_authenticated and user != auction.owner %}
         <form action="" method="POST" id="bid_form">{% csrf_token %}
             {{ form }}
-            <input type="submit" value="Submit" name="add_bid">
+            <input type="submit" value="Place Bid" name="add_bid"
+                   class="btn btn-primary">
         </form>
     {% elif user.is_authenticated and user == auction.owner%}
         <form action="" method="POST">{% csrf_token %}
-            <input type="submit" value="Close Listings" class="btn btn-danger btn-block" name="close_listings">
+            <input type="submit" value="Close Listings"
+                   class="btn btn-danger btn-block" name="close_listings">
         </form>
     {% endif %}
 {% else %}
     {% if user.is_authenticated and user == winner %}
-        <p class="text-success">Congratulation <strong>{{ winner.username }}</strong>.
+        <p class="text-success">Congratulation <strong>{{ winner.username }}
+        </strong>.
             You are winner this auctions !</p>
-        <p class="text-muted">If you did not provide a delivery address during registration,
+        <p class="text-muted">If you did not provide a delivery address
+            during registration,
             please contact the auction owner.</p>
     {% elif user.is_authenticated and user == auction.owner %}
         <p><strong>{{ winner.username }}</strong> won this auction.</p>
@@ -63,7 +69,9 @@
             <li>First Name: {{ winner.first_name }}</li>
             <li>Last Name: {{ winner.last_name }}</li>
             <li>Email Address: {{ winner.email }}</li>
-            {% if winner.address %}<li>Delivery Address: {{ winner.address }}</li>{% endif %}
+            {% if winner.address %}
+                <li>Delivery Address: {{ winner.address }}</li>
+            {% endif %}
         </ul>
     {% else %}
         <p class="text-danger">Auction is closed.</p>
@@ -86,6 +94,26 @@
             {% endfor %}
         </li>
     </ul>
+</div>
+
+<div>
+{% if user.is_authenticated and user != auction.owner %}
+    <form action="" method="POST">{% csrf_token %}
+        {{ form_comment }}
+    <input type="submit" value="Add Comment" name="comment"
+           class="btn btn-info">
+    </form>
+{% endif %}
+</div>
+<div>
+{% if comment_list %}
+    <ul>
+    {% for comment in comment_list %}
+        <li><strong>{{ comment.user.username }}</strong><br>
+            {{ comment.description }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
 </div>
 
 {% endblock %}

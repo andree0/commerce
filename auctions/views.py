@@ -6,8 +6,20 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 from django.views.generic.base import View
 
-from auctions.forms import AuctionForm, BidForm, RegisterForm
-from auctions.models import Auction, Bid, Category, CustomUser, Watchlist
+from auctions.forms import (
+    AuctionForm,
+    BidForm,
+    CommentForm,
+    RegisterForm,
+)
+from auctions.models import (
+    Auction,
+    Bid,
+    Category,
+    Comment,
+    CustomUser,
+    Watchlist,
+)
 
 
 AUCTIONS_PAGINATE_BY = 10
@@ -98,13 +110,16 @@ class ListingsPageView(View):
 
     def get(self, request, auction_pk, *args, **kwargs):
         auction = get_object_or_404(Auction, pk=auction_pk)
+
         try:
             img_width, img_height = get_image_dimensions(auction.image.file)
             self.context['img_width'] = img_width
             self.context['img_height'] = img_height
         except ValueError:
             pass
+
         self.context['auction'] = auction
+
         if request.user.is_authenticated:
             if Watchlist.objects.filter(user=request.user, auction=auction):
                 self.context['is_watch'] = True
@@ -116,6 +131,12 @@ class ListingsPageView(View):
                 self.context['winner'] = win_bid.user
             except (ValueError, AttributeError):
                 pass
+            form_comment = CommentForm(initial={
+                'user': request.user,
+                'auction': auction
+            })
+            self.context['form_comment'] = form_comment
+
         if auction.current_price:
             form = self.form_class(initial={
                 'user': request.user, 'auction': auction,
@@ -126,13 +147,19 @@ class ListingsPageView(View):
                 'price': round(float(auction.min_price) + 0.01, 2)})
         self.context['form'] = form
 
+        if Comment.objects.filter(auction=auction):
+            self.context['comment_list'] = Comment.objects.filter(
+                auction=auction)
+
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
         auction = get_object_or_404(Auction, pk=kwargs['auction_pk'])
+
         if request.POST.get("eye") == 'add_to_watchlist':
             Watchlist.objects.create(user=request.user, auction=auction)
             self.context['is_watch'] = True
+
         if request.POST.get("eye") == 'delete_from_watchlist':
             if Watchlist.objects.filter(user=request.user, auction=auction):
                 Watchlist.objects.get(
@@ -140,6 +167,7 @@ class ListingsPageView(View):
                     auction=auction
                 ).delete()
                 self.context['is_watch'] = False
+
         if request.POST.get('add_bid'):
             form = self.form_class(request.POST)
             if form.is_valid():
@@ -154,6 +182,7 @@ class ListingsPageView(View):
                     'price': round(float(auction.current_price) + 0.01, 2)})
             else:
                 self.context['form'] = form
+
         if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
@@ -162,5 +191,13 @@ class ListingsPageView(View):
             if win_bid:
                 self.context['winner'] = win_bid.user
             self.context['auction'] = auction
+
+        if request.POST.get('comment'):
+            form_comment = CommentForm(request.POST)
+            if form_comment.is_valid():
+                Comment.objects.create(**form_comment.cleaned_data)
+                self.context['comment_list'] = Comment.objects.filter(
+                    auction=auction
+                )
 
         return render(self.request, self.template_name, self.context)

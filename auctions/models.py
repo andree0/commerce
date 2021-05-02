@@ -55,13 +55,13 @@ class Bid(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2,
-                                verbose_name='Your bid')
+                                verbose_name='')
 
 
 class Comment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    description = models.TextField()
+    description = models.TextField(verbose_name='')
 
 
 class Watchlist(models.Model):

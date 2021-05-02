@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from auctions.models import Auction, Bid, CustomUser
+from auctions.models import Auction, Bid, Comment, CustomUser
 from auctions.validators import validate_password
 
 
@@ -93,6 +93,7 @@ class BidForm(forms.ModelForm):
             'user': forms.HiddenInput,
             'price': forms.NumberInput(attrs={
                 'step': 0.01,
+                'class': 'form-control'
             })
         }
 
@@ -112,3 +113,18 @@ class BidForm(forms.ModelForm):
                     'price',
                     "Your bid must be a higher than current price !"
                 )
+
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ('user', 'auction', 'description', )
+        widgets = {
+            'user': forms.HiddenInput,
+            'auction': forms.HiddenInput,
+            'description': forms.TextInput(attrs={
+                'placeholder': 'Your Comment',
+                'class': 'form-control'
+            })
+        }
