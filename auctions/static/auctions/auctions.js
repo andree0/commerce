@@ -16,7 +16,7 @@ const buttonBid = formBid.querySelector("input[name='add_bid']");
 const inputPriceBid = document.querySelector("input[name='price']");
 formBid.className = "d-inline-flex align-items-center m-2"
 const divInputGroup = document.createElement("div");
-divInputGroup.className = "input-group mb-2";
+divInputGroup.className = "input-group";
 const divInputGroupPrepend = document.createElement("div");
 divInputGroupPrepend.className = "input-group-prepend";
 const divInputGroupText = document.createElement("div");
