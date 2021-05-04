@@ -132,6 +132,7 @@ class ListingsPageView(View):
                 auction=auction).count()
         else:
             self.context['bid_count'] = 0
+            self.context['all_bids'] = 0
 
     def get(self, request, auction_pk, *args, **kwargs):
         """Handle GET requests: instantiate a blank version of the form."""
