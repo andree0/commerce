@@ -124,6 +124,15 @@ class ListingsPageView(View):
     form_class = BidForm
     context = {}
 
+    def get_bid_count(self, auction):
+        if Bid.objects.filter(auction=auction):
+            self.context['bid_count'] = Bid.objects.filter(
+                auction=auction).count() - 1
+            self.context['all_bids'] = Bid.objects.filter(
+                auction=auction).count()
+        else:
+            self.context['bid_count'] = 0
+
     def get(self, request, auction_pk, *args, **kwargs):
         """Handle GET requests: instantiate a blank version of the form."""
         auction = get_object_or_404(Auction, pk=auction_pk)
@@ -153,6 +162,8 @@ class ListingsPageView(View):
                 'auction': auction
             })
             self.context['form_comment'] = form_comment
+
+        self.get_bid_count(auction)
 
         if auction.current_price:
             form = self.form_class(initial={
@@ -207,11 +218,13 @@ class ListingsPageView(View):
         if request.POST.get('close_listings'):
             auction.active = False
             auction.save()
+        try:
             win_bid = Bid.objects.filter(
                 auction=auction).order_by('-price').first()
-            if win_bid:
-                self.context['winner'] = win_bid.user
-            self.context['auction'] = auction
+            self.context['winner'] = win_bid.user
+        except (ValueError, AttributeError):
+            pass
+        self.context['auction'] = auction
 
         if request.POST.get('comment'):
             form_comment = CommentForm(request.POST)
@@ -220,5 +233,7 @@ class ListingsPageView(View):
                 self.context['comment_list'] = Comment.objects.filter(
                     auction=auction
                 )
+
+        self.get_bid_count(auction)
 
         return render(self.request, self.template_name, self.context)
