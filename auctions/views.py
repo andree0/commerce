@@ -125,6 +125,7 @@ class ListingsPageView(View):
     context = {}
 
     def get_bid_count(self, auction):
+        """Adds to context 'bid_count' and 'all_bids'."""
         if Bid.objects.filter(auction=auction):
             self.context['bid_count'] = Bid.objects.filter(
                 auction=auction).count() - 1
