@@ -113,16 +113,14 @@
 {% endif %}
 </div>
 <div>
-{% if comment_list %}
-    <ul>
-    {% for comment in comment_list %}
-        <li><strong>{{ comment.user.username }}</strong><br>
-            {{ comment.description }}</li>
-    {% empty %}
-        <p>No any comments.</p>
-    {% endfor %}
-    </ul>
-{% endif %}
+<ul>
+{% for comment in comment_list %}
+    <li><strong>{{ comment.user.username }}</strong><br>
+        {{ comment.description }}</li>
+{% empty %}
+    <p>No any comments.</p>
+{% endfor %}
+</ul>
 </div>
 
 {% endblock %}

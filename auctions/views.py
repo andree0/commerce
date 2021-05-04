@@ -175,9 +175,8 @@ class ListingsPageView(View):
                 'price': round(float(auction.min_price) + 0.01, 2)})
         self.context['form'] = form
 
-        if Comment.objects.filter(auction=auction):
-            self.context['comment_list'] = Comment.objects.filter(
-                auction=auction)
+        self.context['comment_list'] = Comment.objects.filter(
+            auction=auction)
 
         return render(request, self.template_name, self.context)
 
