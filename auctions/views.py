@@ -21,7 +21,6 @@ from auctions.models import (
     Watchlist,
 )
 
-
 AUCTIONS_PAGINATE_BY = 10
 
 
@@ -178,7 +177,7 @@ class ListingsPageView(View):
         self.context['form'] = form
 
         self.context['comment_list'] = Comment.objects.filter(
-            auction=auction)
+            auction=auction).order_by('-pk')
 
         return render(request, self.template_name, self.context)
 
@@ -232,8 +231,7 @@ class ListingsPageView(View):
             if form_comment.is_valid():
                 Comment.objects.create(**form_comment.cleaned_data)
                 self.context['comment_list'] = Comment.objects.filter(
-                    auction=auction
-                )
+                    auction=auction).order_by('-pk')
 
         self.get_bid_count(auction)
 
