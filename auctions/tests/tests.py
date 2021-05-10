@@ -116,6 +116,7 @@ def test_add_to_watchlist(client, auction, rf, user):
     request = rf.get(url)
     request.user = user
     response = client.post(url, data={
+        'is_watch': False,
         'eye': 'add_to_watchlist',
         'request': request,
         'auction': auction.pk,
