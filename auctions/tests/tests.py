@@ -5,6 +5,7 @@ from django.utils.http import urlencode
 from auctions.models import Auction, CustomUser, Watchlist
 from auctions.tests.utils import fake_auction_data, fake_user_data
 
+
 # Check status code 200 - method GET ---------------------------------------
 
 @pytest.mark.django_db
@@ -116,6 +117,7 @@ def test_add_to_watchlist(user, auction, client, rf):
     response = client.post(url, data={
         'eye': 'add_to_watchlist',
         'request': request
-    })
+    }, content_type="application/x-www-form-urlencoded")
     assert response.status_code == 200
     assert Watchlist.objects.count() == watchlist_before + 1
+    assert response.context["is_watch"]
