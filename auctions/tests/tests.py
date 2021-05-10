@@ -117,7 +117,8 @@ def test_add_to_watchlist(client, auction, rf, user):
     response = client.post(url, data={
         'eye': 'add_to_watchlist',
         'request': request,
-        'auction': auction
+        'auction': auction.pk,
+        'user': user.pk
     }, content_type="application/x-www-form-urlencoded")
     assert response.status_code == 200
     assert Watchlist.objects.count() == watchlist_before + 1
