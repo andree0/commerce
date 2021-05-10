@@ -1,5 +1,4 @@
 import pytest
-from 
 from auctions.models import Auction, CustomUser, Watchlist
 from auctions.tests.utils import fake_auction_data, fake_user_data
 
@@ -110,6 +109,10 @@ def test_create_auction(user, client):
 def test_add_to_watchlist(user, auction, client):
     client.login(user=user.username, password="strongPassword100%")
     watchlist_before = Watchlist.objects.count()
-    response = client.post(f'/listings_details/{auction.pk}/', data={'eye': 'add_to_watchlist', 'user': request.user, 'auction': auction})
+    response = client.post(f'/listings_details/{auction.pk}/', data={
+        'eye': 'add_to_watchlist',
+        'user': user.pk,
+        'auction': auction.pk
+    }, format='json')
     assert response.status_code == 200
     assert Watchlist.objects.count() == watchlist_before + 1
