@@ -2,7 +2,7 @@ import pytest
 
 from django.utils.http import urlencode
 
-from auctions.models import Auction, CustomUser, Watchlist
+from auctions.models import Auction, Comment, CustomUser, Watchlist
 from auctions.tests.utils import fake_auction_data, fake_user_data
 
 
@@ -98,7 +98,7 @@ def test_registration_user(client):
 
 
 @pytest.mark.django_db
-def test_create_auction(user, client):
+def test_create_auction(client, user):
     client.login(username=user.username, password="strongPassword100%")
     auctions_before = Auction.objects.count()
     auction_data = fake_auction_data()
@@ -108,7 +108,7 @@ def test_create_auction(user, client):
 
 
 @pytest.mark.django_db
-def test_add_to_watchlist(user, auction, client, rf):
+def test_add_to_watchlist(client, auction, rf, user):
     client.login(user=user.username, password="strongPassword100%")
     watchlist_before = Watchlist.objects.count()
     url = f'/listings_details/{auction.pk}/'
@@ -121,3 +121,19 @@ def test_add_to_watchlist(user, auction, client, rf):
     assert response.status_code == 200
     assert Watchlist.objects.count() == watchlist_before + 1
     assert response.context["is_watch"]
+
+
+@pytest.mark.django_db
+def test_add_comment(client, auction, user):
+    client.login(user=user.username, password="strongPassword100%")
+    url = f'/listings_details/{auction.pk}/'
+    comment_before = Comment.objects.count()
+    data = {
+        'user': user.pk,
+        'auction': auction.pk,
+        'description': 'To jest komentarz testowy !'
+    }
+    response = client.post(url, data)
+    assert response.status_code == 200
+    assert Comment.objects.count() == comment_before + 1
+
