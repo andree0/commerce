@@ -156,5 +156,18 @@ def test_add_bid(client, auction, user):
     response = client.post(url, data)
     assert response.status_code == 200
     assert Bid.objects.count() == bid_before + 1
-    # assert response.context['current_price'] == 100
+    assert auction.owner != user
+    assert response.context["auction"].current_price == 100
 
+
+@pytest.mark.django_db
+def test_close_auction(client, auction, user):
+    client.login(user=user.username, password="strongPassword100%")
+    url = f'/listings_details/{auction.pk}/'
+    auction.owner = user
+    data = {
+        'close_listings': True
+    }
+    response = client.post(url, data)
+    assert response.status_code == 200
+    assert response.context["auction"].active is False
