@@ -36,13 +36,13 @@ def create_fake_user():
 
 def generate_number():
     """Generate next number"""
-    x = 0
+    number = 0
     while True:
-        y = yield x
-        if y is None:
-            x = x + 1
+        result = yield number
+        if result is None:
+            number += 1
         else:
-            x = y
+            number = result
 
 
 def fake_data_category(gen_nr):
