@@ -165,9 +165,13 @@ def test_close_auction(client, auction, user):
     client.login(user=user.username, password="strongPassword100%")
     url = f'/listings_details/{auction.pk}/'
     auction.owner = user
+    active_auction_before = Auction.objects.filter(active=True).count()
     data = {
         'close_listings': True
     }
     response = client.post(url, data)
     assert response.status_code == 200
     assert response.context["auction"].active is False
+    assert Auction.objects.filter(active=True).count() == \
+           active_auction_before - 1
+
