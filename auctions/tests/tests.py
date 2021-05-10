@@ -1,5 +1,6 @@
 import pytest
-import requests
+
+from django.utils.http import urlencode
 
 from auctions.models import Auction, CustomUser, Watchlist
 from auctions.tests.utils import fake_auction_data, fake_user_data
@@ -90,8 +91,7 @@ def test_your_auctions_to_login_view(client):
 def test_registration_user(client):
     users_before = CustomUser.objects.count()
     user_data = fake_user_data()
-    response = client.post('/register/', data=user_data,
-                           format='json')
+    response = client.post('/register/', data=user_data)
     assert response.status_code == 302
     assert CustomUser.objects.count() == users_before + 1
 
@@ -101,8 +101,7 @@ def test_create_auction(user, client):
     client.login(username=user.username, password="strongPassword100%")
     auctions_before = Auction.objects.count()
     auction_data = fake_auction_data()
-    response = client.post('/create_auction/', data=auction_data,
-                           format='json')
+    response = client.post('/create_auction/', data=auction_data)
     assert response.status_code == 302
     assert Auction.objects.count() == auctions_before + 1
 
@@ -117,6 +116,6 @@ def test_add_to_watchlist(user, auction, client, rf):
     response = client.post(url, data={
         'eye': 'add_to_watchlist',
         'request': request
-    }, format='json')
+    })
     assert response.status_code == 200
     assert Watchlist.objects.count() == watchlist_before + 1
