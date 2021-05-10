@@ -2,7 +2,7 @@ import pytest
 
 from django.utils.http import urlencode
 
-from auctions.models import Auction, Comment, CustomUser, Watchlist
+from auctions.models import Auction, Bid, Comment, CustomUser, Watchlist
 from auctions.tests.utils import fake_auction_data, fake_user_data
 
 
@@ -107,6 +107,7 @@ def test_create_auction(client, user):
     assert Auction.objects.count() == auctions_before + 1
 
 
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_add_to_watchlist(client, auction, rf, user):
     client.login(user=user.username, password="strongPassword100%")
@@ -139,4 +140,21 @@ def test_add_comment(client, auction, user):
     response = client.post(url, data)
     assert response.status_code == 200
     assert Comment.objects.count() == comment_before + 1
+
+
+@pytest.mark.django_db
+def test_add_bid(client, auction, user):
+    client.login(user=user.username, password="strongPassword100%")
+    url = f'/listings_details/{auction.pk}/'
+    bid_before = Bid.objects.count()
+    data = {
+        'add_bid': True,
+        'user': user.pk,
+        'auction': auction.pk,
+        'price': 100
+    }
+    response = client.post(url, data)
+    assert response.status_code == 200
+    assert Bid.objects.count() == bid_before + 1
+    # assert response.context['current_price'] == 100
 

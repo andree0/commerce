@@ -34,15 +34,27 @@ def create_fake_user():
         )
 
 
-def fake_data_category():
+def generate_number():
+    """Generate next number"""
+    x = 0
+    while True:
+        y = yield x
+        if y is None:
+            x = x + 1
+        else:
+            x = y
+
+
+def fake_data_category(gen_nr):
     """Generate a dict of category data"""
-    return {'name': fake.word()}
+    return {'name': fake.word() + str(next(gen_nr))}
 
 
 def create_fake_categories():
     """Generate 10 new fake categories and save to database"""
+    gen_nr = generate_number()
     for _ in range(10):
-        category = fake_data_category()
+        category = fake_data_category(gen_nr)
         Category.objects.create(name=category['name'])
     return Category.objects.all()
 
