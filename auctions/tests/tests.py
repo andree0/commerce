@@ -116,7 +116,8 @@ def test_add_to_watchlist(client, auction, rf, user):
     request.user = user
     response = client.post(url, data={
         'eye': 'add_to_watchlist',
-        'request': request
+        'request': request,
+        'auction': auction
     }, content_type="application/x-www-form-urlencoded")
     assert response.status_code == 200
     assert Watchlist.objects.count() == watchlist_before + 1
@@ -129,6 +130,7 @@ def test_add_comment(client, auction, user):
     url = f'/listings_details/{auction.pk}/'
     comment_before = Comment.objects.count()
     data = {
+        'comment': True,
         'user': user.pk,
         'auction': auction.pk,
         'description': 'To jest komentarz testowy !'
