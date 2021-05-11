@@ -1,0 +1,22 @@
+body {
+    padding: 10px;
+}
+
+.link_detail, .link_detail:hover {
+    text-decoration: none;
+    color: #000000;
+}
+
+.listing {
+    flex-shrink: 0;
+    border: #d3d3d3 1px solid;
+}
+
+.listing img {
+    max-height: 200px;
+    max-width: 100%;
+}
+
+input, textarea {
+    margin-bottom: 10px;
+}
