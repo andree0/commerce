@@ -1,3 +1,5 @@
+#for docker, you install requirements_docker.txt
+
 asgiref==3.3.4
 attrs==20.3.0
 blessings==1.7
