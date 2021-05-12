@@ -24,4 +24,6 @@ You have to enter the container with the command `sudo docker exec -it [name you
 Next, You execute the command `python mange.py migrate` \
 Next, You execute the command `python manage.py create_categories` . \
 Now, You can to exit this container by pressing `Ctrl+C` \
-and You can to run app with docker by command `sudo docker-compose up` .
+and You can to run app with docker by command `sudo docker-compose up` . \
+\
+If all is right, You can restore previous file names.
