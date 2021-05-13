@@ -1,7 +1,5 @@
 import pytest
 
-from django.utils.http import urlencode
-
 from auctions.models import Auction, Bid, Comment, CustomUser, Watchlist
 from auctions.tests.utils import fake_auction_data, fake_user_data
 
@@ -173,6 +171,5 @@ def test_close_auction(client, auction, user):
     response = client.post(url, data)
     assert response.status_code == 200
     assert response.context["auction"].active is False
-    assert Auction.objects.filter(active=True).count() == \
-           active_auction_before - 1
-
+    assert Auction.objects.filter(
+        active=True).count() == active_auction_before - 1
