@@ -18,7 +18,7 @@ docker
 --------
 If You have docker, \
 First, rename file _requirements.txt_ to for example _requirements_main.txt_, \
-Second, rename file _requirements_docker.txt to _requirements.txt_. \
+Second, rename file _requirements_docker.txt_ to _requirements.txt_. \
 File __requirements.txt__ will to install for during create container docker.
 This is necessary due to package conflicts.
 
