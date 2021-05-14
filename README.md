@@ -8,12 +8,14 @@ The application is used to list items to the auction or bid on already exist auc
 You don't need to be logged in to view the auctions.
 
 
-#heroku
+heroku
+-------
 This is url address to host my app on heroku: \
 https://first-project-commerce.herokuapp.com/ \
 You can click on link and use this app.
 
-#docker
+docker
+--------
 If You have docker, \
 First, rename file _requirements.txt_ to for example _requirements_main.txt_, \
 Second, rename file _requirements_docker.txt to _requirements.txt_. \
