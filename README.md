@@ -1,4 +1,5 @@
-#about _Commerce_ project
+about _Commerce_ project
+-------------------------
 **In this project used:** _Python 3.8, Django 3.2, SQLite3, postgresql, 
                Pillow, Faker, pytest, generic View, ModelForm_
 
