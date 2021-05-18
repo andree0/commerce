@@ -15,7 +15,7 @@
             <div class="d-flex mb-3 rounded p-0 listing">
                 <div class="col-4 text-center align-items-center m-auto px-0">
                     {% if auction.image %}
-                        <img src="{{ auction.image.url }}" class="rounded">
+                        <img src="{% static auction.image.url %}" class="rounded">
                     {% else %}
                         <span class="text-muted m-0">No photo.</span>
                     {% endif %}
