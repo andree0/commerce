@@ -76,17 +76,12 @@ WSGI_APPLICATION = 'commerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dcgvkhvtoup3fk',
-        'HOST': 'ec2-54-155-87-214.eu-west-1.compute.amazonaws.com',
-        'PORT': 5432,
-        'USER': 'njfvjntjgngpbu',
-        'PASSWORD': '06eeaa329ff93f86eada2b15b0296250c3b9efbfc30f8015934e'
-                    '3584b66d6245'
-    }
-}
+try:
+    from commerce.local_settings import DATABASES
+except ModuleNotFoundError:
+    print("Brak konfiguracji bazy danych w pliku local_settings.py!")
+    print("Uzupełnij dane i spróbuj ponownie!")
+    exit(0)
 
 AUTH_USER_MODEL = 'auctions.CustomUser'
 
