@@ -72,6 +72,7 @@
             during registration,
             please contact the auction owner.</p>
     {% elif user.is_authenticated and user == auction.owner %}
+        {% if winner %}
         <p><strong>{{ winner.username }}</strong> won this auction.</p>
         <ul class="text-info">Winner Data To Contact:
             <li>First Name: {{ winner.first_name }}</li>
@@ -81,6 +82,9 @@
                 <li>Delivery Address: {{ winner.address }}</li>
             {% endif %}
         </ul>
+        {% else %}
+            <p>Nobody bid the auction</p>
+        {% endif %}
     {% else %}
         <p class="text-danger">Auction is closed.</p>
     {% endif %}
