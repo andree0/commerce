@@ -1,6 +1,6 @@
 about _Commerce_ project
 -------------------------
-**In this project used:** _Python 3.8, Django 3.2, SQLite3, postgresql, 
+**In this project used:** _Python 3.8, Django 3.2, PostgreSQL, 
                Pillow, Faker, pytest, generic View, ModelForm_
 
 This project contain _Auction_ app. \
