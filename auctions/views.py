@@ -142,7 +142,7 @@ class ListingsPageView(View):
             img_width, img_height = get_image_dimensions(auction.image.file)
             self.context['img_width'] = img_width
             self.context['img_height'] = img_height
-        except ValueError:
+        except (ValueError, FileNotFoundError, ):
             pass
 
         self.context['auction'] = auction

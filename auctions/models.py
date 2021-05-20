@@ -7,7 +7,7 @@ class CustomUser(AbstractUser):
     username = models.CharField(max_length=64, unique=True)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
-    email = models.EmailField(unique=True, blank=True)
+    email = models.EmailField(blank=True, null=True)
     password = models.CharField(max_length=255)
     address = models.CharField(max_length=255, blank=True, null=True,
                                verbose_name='Delivery address (optional)')
