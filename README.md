@@ -30,3 +30,8 @@ Now, You can to exit this container by pressing `Ctrl+C` \
 and You can to run app with docker by command `sudo docker-compose up` . \
 \
 If all is right, You can restore previous file names.
+
+Screenshots
+------------
+No login
+![alt text](https://github.com/andree0/commerce/tree/main/static/screenshots/no_login.png?raw=true)
