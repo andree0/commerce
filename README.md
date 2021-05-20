@@ -33,5 +33,32 @@ If all is right, You can restore previous file names.
 
 Screenshots
 ------------
-No login
-![alt text](https://github.com/andree0/commerce/tree/main/static/screenshots/no_login.png?raw=true)
+View, when You no login \
+![No login menu photo](https://github.com/andree0/commerce/blob/main/static/screenshots/no_login.png) \
+\
+View, when You login \
+![Login menu photo](https://github.com/andree0/commerce/blob/main/static/screenshots/login.png) \
+\
+All auctions \
+![All auctions photo](https://github.com/andree0/commerce/blob/main/static/screenshots/all_auction.png) \
+\
+Categories of auction \
+![list of categories photo](https://github.com/andree0/commerce/blob/main/static/screenshots/categories.png) \
+\
+Index view \
+![index view photo](https://github.com/andree0/commerce/blob/main/static/screenshots/index_view.png) \
+\
+View my auction \
+![my auction photo](https://github.com/andree0/commerce/blob/main/static/screenshots/my_auctions.png) \
+\
+View somebody auction \
+![somebody auction photo](https://github.com/andree0/commerce/blob/main/static/screenshots/somebody_auctions.png) \
+\
+View somebody closed auction \
+![somebody auction closed photo](https://github.com/andree0/commerce/blob/main/static/screenshots/somebody-auction_closed.png) \
+\
+View my closed auction \
+![my auction closed photo](https://github.com/andree0/commerce/blob/main/static/screenshots/my_auction_closed.png) \
+\
+View my won auction \
+![my won auction photo](https://github.com/andree0/commerce/blob/main/static/screenshots/my_won_auction.png)
