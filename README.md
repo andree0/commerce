@@ -33,19 +33,19 @@ If all is right, You can restore previous file names.
 
 Screenshots
 ------------
-View, when You no login \
+View when you are not logged in \
 ![No login menu photo](https://github.com/andree0/commerce/blob/main/static/screenshots/no_login.png) \
 \
-View, when You login \
+View when you are logged in \
 ![Login menu photo](https://github.com/andree0/commerce/blob/main/static/screenshots/login.png) \
 \
-All auctions \
+View, all auctions \
 ![All auctions photo](https://github.com/andree0/commerce/blob/main/static/screenshots/all_auction.png) \
 \
-Categories of auction \
+View, Categories of auction \
 ![list of categories photo](https://github.com/andree0/commerce/blob/main/static/screenshots/categories.png) \
 \
-Index view \
+View, home page \
 ![index view photo](https://github.com/andree0/commerce/blob/main/static/screenshots/index_view.png) \
 \
 View my auction \
@@ -54,7 +54,7 @@ View my auction \
 View somebody auction \
 ![somebody auction photo](https://github.com/andree0/commerce/blob/main/static/screenshots/somebody_auctions.png) \
 \
-View somebody closed auction \
+View of an auction closed by someone \
 ![somebody auction closed photo](https://github.com/andree0/commerce/blob/main/static/screenshots/somebody-auction_closed.png) \
 \
 View my closed auction \
