@@ -1,7 +1,7 @@
 about _Commerce_ project
 -------------------------
-**In this project used:** _Python 3.8, Django 3.2, PostgreSQL, 
-               Pillow, Faker, pytest, generic View, ModelForm_
+**Technologies used:** _Python 3.x, Django 3.2, PostgreSQL, 
+               Pillow, Faker, pytest, generic View, Django ModelForm_
 
 This project contain _Auction_ app. \
 The application is used to list items to the auction or bid on already exist auctions (after register and log in). \
