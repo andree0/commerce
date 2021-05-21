@@ -60,5 +60,5 @@ View of an auction closed by someone \
 View my closed auction \
 ![my auction closed photo](https://github.com/andree0/commerce/blob/main/static/screenshots/my_auction_closed.png) \
 \
-View my won auction \
+View of the auction won by me \
 ![my won auction photo](https://github.com/andree0/commerce/blob/main/static/screenshots/my_won_auction.png)
