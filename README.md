@@ -36,6 +36,9 @@ Screenshots
 #### Main view after sign in 
 ![All auctions photo](https://github.com/andree0/commerce/blob/main/static/screenshots/commerce-1.PNG)
 
+#### Auction details 
+![Details auction photo](https://github.com/andree0/commerce/blob/main/static/screenshots/commerce-2.PNG)
+
 #### View when you are not logged in
 ![No login menu photo](https://github.com/andree0/commerce/blob/main/static/screenshots/no_login.png) 
 
