@@ -9,8 +9,9 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=64)
     email = models.EmailField(blank=True, null=True)
     password = models.CharField(max_length=255)
-    address = models.CharField(max_length=255, blank=True, null=True,
-                               verbose_name='Delivery address (optional)')
+    address = models.CharField(
+        max_length=255, blank=True, null=True, verbose_name="Delivery address (optional)"
+    )
 
 
 class Category(models.Model):
@@ -23,14 +24,17 @@ class Category(models.Model):
 class Auction(models.Model):
     title = models.CharField(max_length=32)
     description = models.TextField(null=True, blank=True)
-    min_price = models.DecimalField(max_digits=7, decimal_places=2,
-                                    verbose_name='Min. price [$]',
-                                    validators=[MinValueValidator(1)])
-    current_price = models.DecimalField(max_digits=7, decimal_places=2,
-                                        verbose_name='Current price [$]',
-                                        null=True)
+    min_price = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        verbose_name="Min. price [$]",
+        validators=[MinValueValidator(1)],
+    )
+    current_price = models.DecimalField(
+        max_digits=7, decimal_places=2, verbose_name="Current price [$]", null=True
+    )
     category = models.ManyToManyField(Category, blank=True)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    image = models.ImageField(upload_to="images/", blank=True, null=True)
     active = models.BooleanField(default=True)
     created = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -41,11 +45,9 @@ class Auction(models.Model):
         otherwise assigns self.min_price as self.current_price.
         :return: self.current_price
         """
-        highest_bid = Bid.objects.filter(auction=self).aggregate(
-            models.Max('price')
-        )
+        highest_bid = Bid.objects.filter(auction=self).aggregate(models.Max("price"))
         if highest_bid:
-            self.current_price = highest_bid['price__max']
+            self.current_price = highest_bid["price__max"]
         else:
             self.current_price = self.min_price
         return self.current_price
@@ -59,14 +61,13 @@ class Auction(models.Model):
 class Bid(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=7, decimal_places=2,
-                                verbose_name='')
+    price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name="")
 
 
 class Comment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    description = models.TextField(verbose_name='')
+    description = models.TextField(verbose_name="")
 
 
 class Watchlist(models.Model):
